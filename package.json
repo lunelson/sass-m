@@ -1,0 +1,11 @@
+{
+  "name": "sass-m",
+  "version": "0.9.0",
+  "description": "A Sass media-query breakpoint and variable-scope management system coupled to layout mixins.",
+  "main": "_index.scss",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "Lu Nelson",
+  "license": "MIT"
+}

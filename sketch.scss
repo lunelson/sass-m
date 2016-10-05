@@ -1,0 +1,10 @@
+.test {
+  color: green;
+  @include m(alpha, beta) { color: blue; }
+  @include m(beta, delta) { color: green; }
+
+  @include mm-for(inner-x) {
+    margin-left: m-inner-x(lg);
+    margin-right: m-inner-x(sm);
+  }
+}
