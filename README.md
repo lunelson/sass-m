@@ -2,7 +2,7 @@
 
 !['sass m'](sass-m.png)
 
-**Sass-M** is a media-query breakpoint management and media-scoped variable management system coupled to layout classes and mixins.
+**Sass-M** is a media-breakpoint management and -variable-scope management system coupled to layout mixins. Work-in-progress.
 
 ### Installation
 

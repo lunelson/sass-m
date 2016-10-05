@@ -1,11 +1,28 @@
 {
   "name": "sass-m",
   "version": "0.9.0",
-  "description": "A Sass media-query breakpoint and variable-scope management system coupled to layout mixins.",
+  "description": "Sass @media breakpoints and scopes coupled to layout tools",
   "main": "_index.scss",
   "scripts": {
     "test": "npm test"
   },
   "author": "Lu Nelson",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lunelson/sass-m.git"
+  },
+  "keywords": [
+    "sass",
+    "media",
+    "media-query",
+    "grid",
+    "scope",
+    "variables",
+    "css"
+  ],
+  "bugs": {
+    "url": "https://github.com/lunelson/sass-m/issues"
+  },
+  "homepage": "https://github.com/lunelson/sass-m#readme"
 }
