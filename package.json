@@ -24,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/lunelson/sass-m/issues"
   },
-  "homepage": "https://github.com/lunelson/sass-m#readme"
+  "homepage": "https://github.com/lunelson/sass-m#readme",
+  "dependencies": {
+    "sass-calc": "lunelson/sass-calc",
+    "sass-maps-plus": "lunelson/sass-maps-plus",
+    "sass-to-js": "lunelson/sass-to-js"
+  }
 }
