@@ -1,42 +1,113 @@
-## functions
+## file structure
 
-mm-base()
-mm-base-orig()
-mm()
-mm-orig()
+_index
 
-m(m)
-m-orig(m)
-m-value(key, m)
-m-orig-value(key, m)
-m-font-size()
-m-line-height()
-m-inner-y(mult, m)
-m-inner-x(mult, m)
-m-outer-t,-r,-b,-l(mult, m)
-m-mult-y(key, m)
-m-mult-x(key, m)
+stylesheets/
 
-## mixins
+  base/
+    functions.scss
+      _media
+      _media-orig
+      _base
+      _base-orig
+      _fonts
+        ...
+          size
+          family
+          em-height
+          ex-height
+          spacing-max
+          spacing-end
 
-m(min, max)
+      _parse-mult
+      _get-props-for
+      _get-media-for
+      _normalize-medium
+      _build-query-string
+      _setup-m-by-breakpoint
+      _setup-m-by-columns
 
-mm(media, leading, trailing)
+      m(m) // current medium
+      m-orig(m) // original medium
+      m-value(key, m) // medium-value
+      m-orig-value(key, m)
 
-mm-for(keys...)
-mm-range(min, max)
+      font
+      size
+      line
+      trim-ex
+      trim-em
+      inner-x
+      inner-y
+      inner-y--ex
+      inner-y--em
+      outer-top
+      outer-right
+      outer-bottom
+      outer-left
 
-mm-init(baseMap, mediaMap)
-    // if media keys contain 'breakpoint'
-    mm-setup-by-breakpoint
-    // otherwise work based on grid-values
-    mm-setup-by-column
+    mixins
+      m
+      mm-at
+      mm-for
+      mm
 
-## structure
+    setups
+      setup-m(baseMap, mediaMap, fontsMap, options)
+        - options: setup-type, js-globals, do-grid,-stack,-typo
+        - setup base, media ( --by-breakpoint | --by-columns )
+          - output base and media as data
+        - setup fonts, outer, wrap, unwrap
 
-$mm:
-  base
-  base-orig
-  media
-  media-orig
-    ...
+  grid/
+    functions.scss
+      _grid-width
+      cell-width // for pushing elements
+
+    mixins.scss
+      _cell-padding
+      _grid-margins
+      _float-cell
+      _float-grid
+      _flex-cell
+      _flex-grid
+      _degrid
+      cell
+      grid
+      regrid
+      ungrid
+      cell-push
+      cell-span
+      cell-cycle
+      grid-debug
+    setup.scss
+      setup-grid
+
+  page/
+    mixins/
+      outer
+      wrap
+      unwrap
+
+  stack/
+    mixins.scss
+      stack
+    setup.scss
+      setup-stack
+
+  typo/
+    mixins.scss
+      typo
+    setup.scss
+      setup-typo
+
+  util/
+    functions.scss
+    mixins.scss
+      clip, hide, show, hold
+    setup.scss
+      setup-fonts
+      setup-outer
+      setup-wrap
+      setup-unwrap
+      setup-hold
