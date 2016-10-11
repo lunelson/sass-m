@@ -1,0 +1,59 @@
+
+// mult, line, opts
+@mixin stack($mult: $curr-mult-y-key, $line: $curr-line-key, $font: $curr-font-key) {
+
+  $prev-mult-y-key: $curr-mult-y-key;
+  $prev-line-key: $curr-line-key;
+  $prev-font-key: $curr-font-key;
+
+  $curr-mult-y-key: $mult !global;
+  $curr-line-key: $line !global;
+  $curr-font-key: $font !global;
+  $curr-stack-sel: & !global;
+
+  padding-top: 0.1px; // prevent margin collapse
+  padding-bottom: 0.1px; // ^
+  & > * + * { margin-top: margin-y($mult); }
+
+  @content;
+
+  $curr-mult-y-key: $prev-mult-y-key !global;
+  $curr-line-key: $prev-line-key !global;
+  $curr-font-key: $prev-font-key !global;
+  $curr-stack-sel: null !global;
+}
+
+@function family($font) { @return get($fonts, $font, 'font-family'); }
+
+// line, font, opts
+@mixin trim($line: $curr-line-key, $font: $curr-font-key, $opts: (type: 'ex')) {
+
+  @if type-of($line) == 'map' { $opts: $line; $line: $curr-line-key }
+  @if type-of($font) == 'map' { $opts: $font; $font: $curr-font-key }
+  $excl: append(map-get($opts, 'excl') or (), '.m-block');
+  $type: map-get($opts, 'type');
+
+  @if $line { line-height: line($line); }
+  @if $font { font-family: family($font); }
+
+  @if $curr-stack-sel {
+    @at-root #{insert-parents(null,'>')} {
+      margin-top: trim-to-em(0, $line);
+      margin-bottom: trim-to-em(0, $line);
+      @include adjacent-to(not-selector('*', $excl...)) { margin-top: trim-to-em(null, $line, $type); }
+      @content;
+    }
+  } @else {
+    @at-root #{insert-parents(base-class('m-stack'), '>')} {
+      margin-top: trim-to-em(0, $line);
+      margin-bottom: trim-to-em(0, $line);
+    }
+    $mults: medium-value('mults-y') or medium-value('mults');
+    @each $m, $mult in map-merge((base: 1), $mults) {
+      @at-root #{insert-parents(mult-class('m-stack', $m),'>')} {
+        @include adjacent-to(not-selector('*', $excl...)) { margin-top: trim-to-em(if($m=='base',1,$m), $line, $type); }
+        @content;
+      }
+    }
+  }
+}
