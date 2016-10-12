@@ -1,5 +1,5 @@
 //
-// init helpers [private] ✅
+// [private] init helpers ✅
 // --------------------------------------------------------------------------
 
 
@@ -102,7 +102,7 @@
 
 
 //
-// query helpers [private]
+// [private] query helpers
 // --------------------------------------------------------------------------
 
   @function __get-props-for() { @return __; }
@@ -111,7 +111,7 @@
 
 
 //
-// value helpers [private] ✅
+// [private] value helpers ✅
 // --------------------------------------------------------------------------
 
 
@@ -165,8 +165,8 @@
     @return if(length($result) > 1, $result, nth($result, 1));
   }
 
-  @function __mult($mult, $name) {
-    @if type-of($mult) == 'string' { @return map-get(m-value('#{$name}-mult'), $mult); }
+  @function __mult($mult, $name, $m: $curr-m) {
+    @if type-of($mult) == 'string' { @return map-get(m-value('#{$name}-mult', $m), $mult); }
     @else if type-of($mult) == 'number' { @return __strip(__rem($mult)); }
     @else { @return $mult or 1; }
   }
@@ -203,20 +203,31 @@
 // medium value getters ✅
 // --------------------------------------------------------------------------
 
-
+  // m object
   @function m($m: $curr-m) { @return map-get($media, $m); }
   @function m-orig($m: $curr-m) { @return map-get($media, $m); }
 
+  // generic m value
   @function m-value($value, $m: $curr-m) { @return __get($media, $m, $value); }
   @function m-orig-value($value, $m: $curr-m) { @return __get($media-orig, $m, $value); }
 
-  @function size($mult: $curr-size, $m: $curr-m) { @return __mult($mult, 'size') * m-value('size'); }
-  @function line($mult: $curr-line, $m: $curr-m) { @return __mult($mult, 'line') * m-value('line'); }
+  // simple m values
+  @function inner-x($mult: $curr-inner-x, $m: $curr-m) { @return __mult($mult, 'inner-x', $m) * m-value('inner-x', $m); }
+  @function inner-y($mult: $curr-inner-y, $m: $curr-m) { @return __mult($mult, 'inner-y', $m) * m-value('inner-y', $m); }
+  @function outer-top($mult: $curr-outer-y, $m: $curr-m) { @return __mult($mult, 'outer-y', $m) * m-value('outer-top', $m); }
+  @function outer-right($mult: $curr-outer-x, $m: $curr-m) { @return __mult($mult, 'outer-x', $m) * m-value('outer-right', $m); }
+  @function outer-bottom($mult: $curr-outer-y, $m: $curr-m) { @return __mult($mult, 'outer-y', $m) * m-value('outer-bottom', $m); }
+  @function outer-left($mult: $curr-outer-x, $m: $curr-m) { @return __mult($mult, 'outer-x', $m) * m-value('outer-left', $m); }
 
-  @function inner-x($mult: $curr-inner-x, $m: $curr-m) { @return __mult($mult, 'inner-x') * m-value('inner-x'); }
-  @function inner-y($mult: $curr-inner-y, $m: $curr-m) { @return __mult($mult, 'inner-y') * m-value('inner-y'); }
+  // complex m values
+  @function size($mult: $curr-size, $font: $curr-f, $m: $curr-m) {
+    $size-adjust: f-value('size-adjust', $f);
+    @return __mult($mult, 'size', $m) * 1rem * $size-adjust;
+  }
+  @function line($mult: $curr-line, $font: $curr-f, $m: $curr-m) {
+    $size-adjust: f-value('size-adjust', $f);
+    @return __mult($mult, 'line') * m-value('line') / $size-adjust;
+  }
 
-  @function outer-top($mult: $curr-outer-y, $m: $curr-m) { @return __mult($mult, 'outer-y') * m-value('outer-top'); }
-  @function outer-right($mult: $curr-outer-x, $m: $curr-m) { @return __mult($mult, 'outer-x') * m-value('outer-right'); }
-  @function outer-bottom($mult: $curr-outer-y, $m: $curr-m) { @return __mult($mult, 'outer-y') * m-value('outer-bottom'); }
-  @function outer-left($mult: $curr-outer-x, $m: $curr-m) { @return __mult($mult, 'outer-x') * m-value('outer-left'); }
+  @function trim(){}
+
