@@ -13,7 +13,8 @@
   $globals: () !default;
 
   $curr-m: null !default; // key
-  $curr-f: null !default; // key
+
+  $curr-font: null !default; // key
 
   $curr-size: null !default; // key | value
   $curr-line: null !default; // key | value

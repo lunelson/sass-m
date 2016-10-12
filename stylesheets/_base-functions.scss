@@ -9,7 +9,10 @@
   }
 
   @function __first($list) { @return __nth($list, 1); }
+
   @function __last($list) { @return __nth($list, length($list)); }
+
+  @function __slice() {}
 
   @function __range-pairs($list, $head: true, $tail: true) {
     @if length($list) == 0 { @return $list; }
@@ -22,7 +25,33 @@
     $length: length($result);
     $start: if($head, 1, 2);
     $end: if($tail, $length, $length - 1);
-    @return slice($result, $start, $end);
+    @return __slice($result, $start, $end);
+  }
+
+  @function __get($map, $keys...) {
+    @if type-of($map) != 'map' or length($map) == 0 { @error 'non-map or zero-length-map passed to __get'; }
+    @each $key in $keys {
+      @if type-of($map) != 'map' { @return $map; }
+      $map: map-get($map, $key);
+    }
+    @return $map;
+  }
+
+  @function __one($unit:'') {
+    $ones: ('em': 1em, 'ex': 1ex, 'ch': 1ch, 'rem': 1rem, '%': 1%, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax, 'cm': 1cm, 'mm': 1mm, 'in': 1in, 'px': 1px, 'pt': 1pt, 'pc': 1pc, 'deg': 1deg, 'grad': 1grad, 'rad': 1rad, 'turn': 1turn, 's': 1s, 'ms': 1ms, 'dpi': 1dpi, 'dpcm': 1dpcm, 'dppx': 1dppx);
+    @return map-get($ones, $unit) or 1;
+  }
+  @function __strip($value) {
+    @if not type-of($value) == 'number' { @error 'non-number passed to __strip'}
+    @return if(unitless($value), $value, $value / __one(unit($value)));
+  }
+  @function __assert($value, $unit: '') {
+    @if not type-of($value) == 'number' { @error 'non-number passed to __assert'}
+    @return __strip($value) * __one($unit);
+  }
+  @function __convert($value, $unit: '') {
+    @if not type-of($value) == 'number' { @error 'non-number passed to __convert'}
+    @return __one($unit) + __strip($value);
   }
 
 
@@ -143,37 +172,9 @@
 // --------------------------------------------------------------------------
 
 
-  @function __get($map, $keys...) {
-    @if type-of($map) != 'map' or length($map) == 0 { @error 'non-map or zero-length-map passed to __get'; }
-    @each $key in $keys {
-      @if type-of($map) != 'map' { @return $map; }
-      $map: map-get($map, $key);
-    }
-    @return $map;
-  }
-
-  @function __one($unit:'') {
-    $ones: ('em': 1em, 'ex': 1ex, 'ch': 1ch, 'rem': 1rem, '%': 1%, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax, 'cm': 1cm, 'mm': 1mm, 'in': 1in, 'px': 1px, 'pt': 1pt, 'pc': 1pc, 'deg': 1deg, 'grad': 1grad, 'rad': 1rad, 'turn': 1turn, 's': 1s, 'ms': 1ms, 'dpi': 1dpi, 'dpcm': 1dpcm, 'dppx': 1dppx);
-    @return map-get($ones, $unit) or 1;
-  }
-  @function __strip($value) {
-    @if not type-of($value) == 'number' { @error 'non-number passed to __strip'}
-    @return if(unitless($value), $value, $value / __one(unit($value)));
-  }
-  @function __assert($value, $unit: '') {
-    @if not type-of($value) == 'number' { @error 'non-number passed to __assert'}
-    @return __strip($value) * __one($unit);
-  }
-  @function __convert($value, $unit: '') {
-    @if not type-of($value) == 'number' { @error 'non-number passed to __convert'}
-    @return __one($unit) + __strip($value);
-  }
-
-  @function __rem($values...) {
+  @function __rem($values, $m: $curr-m) {
     @if not $values or length($values) == 0 { @return null; }
-    @if type-of(nth($values, 1)) == 'list' { $values: nth($values, 1); } // ie if SSV
-    $size: if(function-exists('m-value'), m-value('size'), 16);
-    $result: ();
+    $size: m-value('size', $m); $result: ();
     @each $value in $values {
       @if unit($value) == 'px' { $result: append($result, __assert($value / __strip($size), rem), 'space'); }
       @else { $result: append($result, __assert($value, rem), 'space'); }
@@ -181,11 +182,9 @@
     @return if(length($result) > 1, $result, nth($result, 1));
   }
 
-  @function __px($values...) {
+  @function __px($values, $m: $curr-m) {
     @if not $values or length($values) == 0 { @return null; }
-    @if type-of(nth($values, 1)) == 'list' { $values: nth($values, 1); }
-    $size: if(function-exists('m-value'), m-value('size'), 16);
-    $result: ();
+    $size: m-value('size', $m); $result: ();
     @each $value in $values {
       @if unit($value) == 'px' { $result: append($result, $value, 'space'); }
       @else { $result: append($result, __assert($value * __strip($size), 'px'), 'space'); }
@@ -195,7 +194,7 @@
 
   @function __mult($mult, $name, $m: $curr-m) {
     @if type-of($mult) == 'string' { @return map-get(m-value('#{$name}-mult', $m), $mult); }
-    @else if type-of($mult) == 'number' { @return __strip(__rem($mult)); }
+    @else if type-of($mult) == 'number' { @return __strip(__rem($mult, $m)); }
     @else { @return $mult or 1; }
   }
 
@@ -205,9 +204,9 @@
 // --------------------------------------------------------------------------
 
 
-  @function f($f: $curr-f) { @return map-get($fonts, $f); }
-  @function f-value($value, $f: $curr-f) { @return __get($fonts, $f, $value); }
-  @function font-family($f: $curr-f) { @return __get($fonts, $f, 'font-family'); }
+  @function f($font: $curr-font) { @return map-get($fonts, $font); }
+  @function f-value($value, $font: $curr-font) { @return __get($fonts, $font, $value); }
+  @function font-family($font: $curr-font) { @return __get($fonts, $font, 'font-family'); }
 
 
 //
@@ -230,15 +229,28 @@
   @function outer-bottom($mult: $curr-outer-y, $m: $curr-m) { @return __mult($mult, 'outer-y', $m) * m-value('outer-bottom', $m); }
   @function outer-left($mult: $curr-outer-x, $m: $curr-m) { @return __mult($mult, 'outer-x', $m) * m-value('outer-left', $m); }
 
-  // complex m values
-  @function size($mult: $curr-size, $font: $curr-f, $m: $curr-m) {
-    $size-adjust: f-value('size-adjust', $f);
-    @return __mult($mult, 'size', $m) * 1rem * $size-adjust;
-  }
-  @function line($mult: $curr-line, $font: $curr-f, $m: $curr-m) {
-    $size-adjust: f-value('size-adjust', $f);
-    @return __mult($mult, 'line') * m-value('line') / $size-adjust;
+//
+// complex value getters [auto m resolution]
+// --------------------------------------------------------------------------
+
+  // mult, font
+  @function size($mult: $curr-size, $font: $curr-font) { @return __mult($mult, 'size') * 1rem * f-value('size-adjust', $font); }
+  @function line($mult: $curr-line, $font: $curr-font) { @return __mult($mult, 'line') * m-value('line') / f-value('size-adjust', $font); }
+
+  // size, font
+  @function auto-line($size: size(), $font: $curr-font) {}
+
+  // line, font, type
+  @function trim-value($line: $curr-line, $font: $curr-font, $type: 'ex'){
+    $lh: line($line, $font);
+    $em: f-value('em-adjust', $font);
+    $ex: f-value('ex-adjust', $font);
+    $deltas: (em: 0, ex: subtract($em, $ex), mx: subtract($em/2, $ex/2));
+    @return add(($lh * 1em - $em) / 2), map-get($deltas, $type);
   }
 
-  @function trim(){}
-
+  // mult, line, font, type
+  @function trim-margin($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font, $type: 'ex') { @return subtract(inner-y($mult), trim-value($line, $font, $type)); }
+  @function trim-margin-ex($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font) { @return subtract(inner-y($mult), trim-value($line, $font, 'ex')); }
+  @function trim-margin-em($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font) { @return subtract(inner-y($mult), trim-value($line, $font, 'em')); }
+  @function trim-margin-mx($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font) { @return subtract(inner-y($mult), trim-value($line, $font, 'mx')); }

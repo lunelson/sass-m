@@ -156,9 +156,8 @@
   }
 
   @mixin mm($lo: map-keys($media), $hi: null) {
-    @if type-of($lo) == 'list' {
-      @include mm-at($lo) { @content; }
-    } @else {
+    @if type-of($lo) == 'list' { @include mm-at($lo) { @content; } }
+    @else {
       $media-keys: map-keys($media);
       $media-length: length($media-keys);
       $start: if($lo, (index($media-keys, $lo) or 1), 1);
