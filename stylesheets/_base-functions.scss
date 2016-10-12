@@ -1,4 +1,32 @@
 //
+// utilities [private]
+// --------------------------------------------------------------------------
+
+  @function __nth($list, $n) {
+    // TODO allow it to handle strings; create str-nth
+    @if length($list) == 0 or $n < 1 or $n > length($list) { @return null; }
+    @return nth($list, $n);
+  }
+
+  @function __first($list) { @return __nth($list, 1); }
+  @function __last($list) { @return __nth($list, length($list)); }
+
+  @function __range-pairs($list, $head: true, $tail: true) {
+    @if length($list) == 0 { @return $list; }
+    $result: ();
+    @for $n from 1 through length($list) + 1 {
+      $m: $n - 1; $a: if($m == 0, null, nth($list, $m));
+      $b: if($n > length($list), null, nth($list, $n));
+      $result: append($result, ($a $b), 'comma');
+    }
+    $length: length($result);
+    $start: if($head, 1, 2);
+    $end: if($tail, $length, $length - 1);
+    @return slice($result, $start, $end);
+  }
+
+
+//
 // init helpers [private] ✅
 // --------------------------------------------------------------------------
 
@@ -106,8 +134,8 @@
 // --------------------------------------------------------------------------
 
   @function __get-props-for() { @return __; }
-  @function __get-media-for() { @return __; }
-  @function __build-query-string() { @return __; }
+  @function __media-for() { @return __; }
+  @function __query-string() { @return __; }
 
 
 //
@@ -170,23 +198,6 @@
     @else if type-of($mult) == 'number' { @return __strip(__rem($mult)); }
     @else { @return $mult or 1; }
   }
-
-
-//
-// stuff related to single-global variable; not implemented
-// --------------------------------------------------------------------------
-
-  // // one global to hold them all
-  // $__m: () !global;
-
-  // // get main maps
-  // @function __base() { @return map-get($M, 'base'); }
-  // @function __fonts() { @return map-get($M, 'fonts'); }
-  // @function __media() { @return map-get($M, 'media'); }
-
-  // // get orig maps
-  // @function __base-orig() { @return map-get($M, 'base-orig'); }
-  // @function __media-orig() { @return map-get($M, 'media-orig'); }
 
 
 //
