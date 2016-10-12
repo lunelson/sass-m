@@ -1,0 +1,130 @@
+//
+// init defaults ✅
+// --------------------------------------------------------------------------
+
+
+  $font-default: (
+    family: (arial, sans-serif),
+    em-adjust: 1,
+    ex-adjust: 1,
+    size-adjust: 1,
+    spacing-max: 0.5,
+    spacing-end: 50,
+  );
+
+  $fonts-default: (
+    base: ( family: (arial, sans-serif) ),
+    serif: ( family: (georgia, serif) ),
+    mono: ( family: (monaco, consolas, "lucida console", monospace) )
+  );
+
+  $medium-default: (
+    size: 16px,
+    size-mults: (),
+    line: 1.5,
+    line-mults: (),
+    inner-x: 2rem,
+    inner-x-mults: (),
+    inner-y: 2rem,
+    inner-y-mults: (),
+    outer-top: 2rem,
+    outer-bottom: 2rem,
+    outer-y-mults: (),
+    outer-right: 2rem,
+    outer-left: 2rem,
+    outer-x-mults: (),
+    reading-width: 24rem,
+    reading-columns: 4,
+    grid-columns: 4,
+  );
+
+  $media-type-defaults: (
+    columns: (
+      c4: ( grid-columns: 4 ),
+      c6: ( grid-columns: 6 ),
+      c8: ( grid-columns: 8 ),
+      c10: ( grid-columns: 10 ),
+      c12: ( grid-columns: 12 ),
+    ),
+    breakpoints: (
+      a: (breakpoint: 32em),
+      b: (breakpoint: 48em),
+      c: (breakpoint: 64em),
+      d: (breakpoint: 80em),
+    ),
+  );
+
+//
+// init mixins
+// --------------------------------------------------------------------------
+
+  @mixin f-init() {
+    // if length of fonts is 0, merge fonts-default against it;
+    // for each font in fonts, merge font against font-default
+  }
+
+  @mixin m-init($options:(
+
+    init-type: columns, // columns | breakpoints
+    init-outer: true,
+    init-wrap: true,
+    init-grid: true,
+    init-stack: true,
+    init-typo: false,
+    grid-type: flex, // flex | float
+    wrap-type: standard, // standard | extended
+    output: true,
+    globals: (),
+
+  )){
+
+    // parse out $options
+    $type: map-get($options, 'init-type');
+    $output: map-get($options, 'output');
+
+    // backup $base spec; merge spec against $medium-default
+    $base-orig: $base !global;
+    $base: __normalize-medium(map-merge($medium-default, $base)) !global;
+
+    // if $media is empty, assign a default based on type; backup $media
+    $media: if(length($media) > 0, $media, map-get($media-type-defaults, $type)) !global;
+    $media-orig: $media !global;
+
+    // create $current, as recursive merge target
+    $current: $base;
+
+    @each $m, $medium in $media {
+
+      // setup $current by type, per $medium
+      $current: call('setup-medium-by-#{$type}', $current, $medium);
+
+      // merge $current back to $media
+      $media: map-merge($media, ($m: $current)) !global;
+    }
+
+    @if $output {
+
+      //
+      // TODO
+      //
+      // => use sass-to-js function here
+      @include json-content(map-merge($globals, (media: $media, base: $base)));
+
+      // output base styles, where needed
+      @include mm-for(size line) {
+        html { font-size: unit-assert(m-value('scale'), em); }
+        body { line-height: m-value('line'); }
+      }
+
+      @if map-get($options, 'init-outer') { @include init-outer(); }
+      @if map-get($options, 'init-wrap') { @include init-wrap(); }
+      @if map-get($options, 'init-grid') { @include init-grid(); }
+      @if map-get($options, 'init-stack') { @include init-stack(); }
+      @if map-get($options, 'init-typo') { @include init-typo(); }
+
+    }
+  }
+
+//
+// query mixins
+// --------------------------------------------------------------------------
