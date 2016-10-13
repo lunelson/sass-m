@@ -1,2 +1,31 @@
 @import '../../index';
+
+$media: (
+  a: (
+    breakpoint: 20em,
+    size: 20px
+  ),
+  b: (
+    breakpoint: 30em,
+
+  )
+);
+
+@include m-init((init-type: breakpoints, output: false));
+
+.debug {
+  out: inspect(m-value(scale));
+  out: inspect(m-value(size));
+  out: inspect($curr-m);
+
+  @include m(a,b) {
+
+    out: inspect(m-value(scale));
+    out: inspect(m-value(size));
+    out: inspect($curr-m);
+  }
+}
+
+
 /* base: #{map-stringify($base)} */
+/* media: #{map-stringify($media)} */

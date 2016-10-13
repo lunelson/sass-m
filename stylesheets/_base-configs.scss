@@ -23,3 +23,73 @@
   $curr-outer-x: null !default; // key | value
 
   $curr-stack: null !default; // selector
+
+//
+// init defaults ✅
+// --------------------------------------------------------------------------
+
+
+  $font-default: (
+    family: (arial, sans-serif),
+    em-adjust: 1,
+    ex-adjust: 1,
+    size-adjust: 1,
+    spacing-max: 0.5,
+    spacing-end: 50,
+  );
+
+  $fonts-default: (
+    base: ( family: (arial, sans-serif) ),
+    serif: ( family: (georgia, serif) ),
+    mono: ( family: (monaco, consolas, "lucida console", monospace) )
+  );
+
+  $medium-default: (
+    size: 16px,
+    size-mults: (),
+    line: 1.5,
+    line-mults: (),
+    inner-x: 2rem,
+    inner-x-mults: (),
+    inner-y: 2rem,
+    inner-y-mults: (),
+    outer-top: 2rem,
+    outer-bottom: 2rem,
+    outer-y-mults: (),
+    outer-right: 2rem,
+    outer-left: 2rem,
+    outer-x-mults: (),
+    reading-width: 24rem,
+    reading-columns: 4,
+    grid-columns: 4,
+  );
+
+  $media-type-defaults: (
+    columns: (
+      c4: ( grid-columns: 4 ),
+      c6: ( grid-columns: 6 ),
+      c8: ( grid-columns: 8 ),
+      c10: ( grid-columns: 10 ),
+      c12: ( grid-columns: 12 ),
+    ),
+    breakpoints: (
+      a: (breakpoint: 32em),
+      b: (breakpoint: 48em),
+      c: (breakpoint: 64em),
+      d: (breakpoint: 80em),
+    ),
+  );
+
+  $init-options-default: (
+    init-type: columns, // columns | breakpoints
+    init-outer: true,
+    init-wrap: true,
+    init-grid: true,
+    init-stack: true,
+    init-typo: false,
+    grid-type: flex, // flex | float
+    wrap-type: standard, // standard | extended
+    output: true,
+    globals: (),
+  );
+

@@ -69,17 +69,17 @@
   }
 
   @function __strip($value) {
-    @if not type-of($value) == 'number' { @error 'non-number passed to __strip'}
+    @if type-of($value) != 'number' { @error 'non-number passed to __strip'}
     @return if(unitless($value), $value, $value / __one(unit($value)));
   }
 
   @function __assert($value, $unit: '') {
-    @if not type-of($value) == 'number' { @error 'non-number passed to __assert'}
+    @if type-of($value) != 'number' { @error 'non-number passed to __assert'}
     @return __strip($value) * __one($unit);
   }
 
   @function __convert($value, $unit: '') {
-    @if not type-of($value) == 'number' { @error 'non-number passed to __convert'}
+    @if type-of($value) != 'number' { @error 'non-number passed to __convert'}
     @return __one($unit) + __strip($value);
   }
 
@@ -107,7 +107,7 @@
     );
 
     // merge additional corrections if necessary
-    @each $key, $value in map-remove($medium, 'size', 'line', 'breakpoint', 'size-mults', 'line-mults', 'inner-x-mults', 'inner-y-mults') {
+    @each $key, $value in map-remove($medium, 'size', 'line', 'breakpoint', 'size-mults', 'line-mults', 'inner-x-mults', 'inner-y-mults', 'outer-x-mults', 'outer-y-mults') {
       @if unit($value) == 'px' { $normal: map-merge($normal, ($key: $value / $size * 1rem)); }
     }
 
@@ -301,11 +301,11 @@
 
   // generic m value
   @function m-value($value, $m: $curr-m) {
-    @return __get($media, $m, $value);
+    @return if($m, __get($media, $m, $value), __get($base, $value));
   }
 
   @function m-orig-value($value, $m: $curr-m) {
-    @return __get($media-orig, $m, $value);
+    @return if($m, __get($media-orig, $m, $value), __get($base-orig, $value));
   }
 
 
