@@ -151,6 +151,17 @@
 // [private] value helpers ✅
 // --------------------------------------------------------------------------
 
+  @function __string($s) {
+    @return type-of($s) == 'string';
+  }
+
+  @function __number($n) {
+    @return type-of($n) == 'number';
+  }
+
+  @function __unitless($n) {
+    @return if(__number($n), unitless($n), false);
+  }
 
   @function __rem($values, $m: $curr-m) {
     @if not $values or length($values) == 0 { @return null; }
@@ -173,9 +184,18 @@
   }
 
   @function __mult($mult, $name, $m: $curr-m) {
-    @if type-of($mult) == 'string' { @return map-get(m-value('#{$name}-mult', $m), $mult); }
-    @else if type-of($mult) == 'number' { @return __strip(__rem($mult, $m)); }
-    @else { @return $mult or 1; }
+    @if not $mult { @return 1; }
+    @else if __unitless($mult) { @return $mult; }
+    @else if __number($mult) { @return __rem($mult, $m); }
+    @else if __string($mult) {
+      $mults: m-value('#{$name}-mults', $m);
+      @if not $mults { @error 'mults map \"#{$name}-mults\" not found'; }
+      $value: map-get($mults, $mult);
+      @if not $value { @error 'mult \"#{$mult}\" not found in \"#{$name}-mults\"'; }
+      @return $value;
+    }
+    @warn '__mult fell through';
+    @return null;
   }
 
 
@@ -222,27 +242,33 @@
 
   // simple m values
   @function inner-x($mult: $curr-inner-x, $m: $curr-m) {
-    @return __mult($mult, 'inner-x', $m) * m-value('inner-x', $m);
+    $mult: __mult($mult, 'inner-x', $m);
+    @return if(__unitless($mult), $mult * m-value('inner-x', $m), $mult);
   }
 
   @function inner-y($mult: $curr-inner-y, $m: $curr-m) {
-    @return __mult($mult, 'inner-y', $m) * m-value('inner-y', $m);
+    $mult: __mult($mult, 'inner-y', $m);
+    @return if(__unitless($mult), $mult * m-value('inner-y', $m), $mult);
   }
 
   @function outer-top($mult: $curr-outer-y, $m: $curr-m) {
-    @return __mult($mult, 'outer-y', $m) * m-value('outer-top', $m);
+    $mult: __mult($mult, 'outer-y', $m);
+    @return if(__unitless($mult), $mult * m-value('outer-top', $m), $mult);
   }
 
   @function outer-right($mult: $curr-outer-x, $m: $curr-m) {
-    @return __mult($mult, 'outer-x', $m) * m-value('outer-right', $m);
+    $mult: __mult($mult, 'outer-x', $m);
+    @return if(__unitless($mult), $mult * m-value('outer-right', $m), $mult);
   }
 
   @function outer-bottom($mult: $curr-outer-y, $m: $curr-m) {
-    @return __mult($mult, 'outer-y', $m) * m-value('outer-bottom', $m);
+    $mult: __mult($mult, 'outer-y', $m);
+    @return if(__unitless($mult), $mult * m-value('outer-bottom', $m), $mult);
   }
 
   @function outer-left($mult: $curr-outer-x, $m: $curr-m) {
-    @return __mult($mult, 'outer-x', $m) * m-value('outer-left', $m);
+    $mult: __mult($mult, 'outer-x', $m);
+    @return if(__unitless($mult), $mult * m-value('outer-left', $m), $mult);
   }
 
 //
@@ -252,11 +278,15 @@
 
   // mult, font
   @function size($mult: $curr-size, $font: $curr-font) {
-    @return __mult($mult, 'size') * 1rem * font-value('size-adjust', $font);
+    $mult: __mult($mult, 'size');
+    @if not __unitless($mult) { @error 'size(): $mult argument must resolve to unitless number'; }
+    @return $mult * 1rem * font-value('size-adjust', $font);
   }
 
   @function line($mult: $curr-line, $font: $curr-font) {
-    @return __mult($mult, 'line') * m-value('line') / font-value('size-adjust', $font);
+    $mult: __mult($mult, 'line');
+    @if not __unitless($mult) { @error 'line(): $mult argument must resolve to unitless number'; }
+    @return $mult * m-value('line') / font-value('size-adjust', $font);
   }
 
 

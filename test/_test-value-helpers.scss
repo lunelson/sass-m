@@ -1,28 +1,16 @@
 /*
 
-__normalize-medium
-__setup-medium-by-breakpoints
-__setup-medium-by-columns
-__props-for
-__media-for
-__query-string
+__rem
+__em
+__px
 
-
-inner-x
-
-inner-y
-outer-top
-outer-right
-outer-bottom
-outer-left
-size
-line
-auto-line
-trim-value
-trim-margin
-trim-margin-ex
-trim-margin-em
-trim-margin-mx
+__mult
+  return 1 if mult is falsey
+  return mult if unitless-number
+  convert mult to rem if it has a unit
+  error if mult is string, and mult or medium are not found
+  return mult from base, if m is null
+  return mult from medium, if m is specified
 
 
 SASS TRUE SAMPLE TEST
@@ -61,4 +49,5 @@ SASS TRUE SAMPLE TEST
   }
 }
 
-*/
+
+ */
