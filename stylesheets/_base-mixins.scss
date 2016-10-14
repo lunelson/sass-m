@@ -21,7 +21,7 @@
 
     // parse out $options
     $options: map-merge($init-options-default, $options);
-    $basis: map-get($options, 'init-basis');
+    $basis: map-get($options, 'basis');
     $output: map-get($options, 'output');
 
     // backup $base spec; merge spec against $medium-default

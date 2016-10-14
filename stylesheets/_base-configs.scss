@@ -77,7 +77,7 @@
   );
 
   $init-options-default: (
-    init-basis: columns, // columns | breakpoints
+    basis: columns, // columns | breakpoints
     init-outer: true,
     init-wrap: true,
     init-grid: true,

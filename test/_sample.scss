@@ -27,38 +27,38 @@ trim-margin-mx
 
 SASS TRUE SAMPLE TEST
 
-@include test-module('[name of module]') {
+@import "true";
 
-  // for functions
-  @include test('[function]') {
+@include test-module('Utilities') {
 
-    // prep and calc $input and $expect
-    $desc: '[what happens]';
-    $input: fn();
-    $expect: 'result';
-    @include assert-equal($input, $expect, $desc);
+  // Testing Functions
+  @include test('Map Add [function]') {
+    $base: (one: 1, two: 1, three: 1);
+    $add: (one: 1, two: 2, three: -1);
 
-    // other mixins
-    @include assert-true($input, $desc);
-    @include assert-false($input, $desc);
-    @include assert-equal($input, $expect, $desc);
-    @include assert-unequal($input, $expect, $desc);
+    $test: map-add($base, $add);
+    $expect: (one: 2, two: 3, three: 0);
+    @include assert-equal($test, $expect,
+      'Returns the sum of two numeric maps');
   }
 
-  // for mixins
-  @include test('[mixin]') {
-
-    $desc: '[what happens]';
-    @include assert($desc) {
-      @include input {
-        // content
+  // Testing Mixins
+  @include test('Font Size [mixin]') {
+    @include assert('Outputs a font size and line height based on keyword.') {
+      @include output { // should this be called 'input???'
+        @include font-size(large);
       }
+
       @include expect {
-        // output
+        font-size: 2rem;
+        line-height: 3rem;
       }
     }
-
   }
 }
 
+// Optionally show summary report in CSS and/or the command line:
+// - If you use Mocha, reporting to the command line is automatic.
+// - if you use true-cli, report(terminal) is required for output.
+@include report;
 */

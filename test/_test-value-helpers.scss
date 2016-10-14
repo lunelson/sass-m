@@ -1,7 +1,10 @@
+
+
 /*
 
+VALUE HELPERS
+
 __rem
-__em
 __px
 
 __mult
@@ -12,42 +15,39 @@ __mult
   return mult from base, if m is null
   return mult from medium, if m is specified
 
+*/
 
-SASS TRUE SAMPLE TEST
 
-@include test-module('[name of module]') {
+//
+// dependencies
 
-  // for functions
-  @include test('[function]') {
+@import 'true';
+@import '../index';
 
-    // prep and calc $input and $expect
-    $desc: '[what happens]';
-    $input: fn();
-    $expect: 'result';
-    @include assert-equal($input, $expect, $desc);
+//
+// setups
 
-    // other mixins
-    @include assert-true($input, $desc);
-    @include assert-false($input, $desc);
-    @include assert-equal($input, $expect, $desc);
-    @include assert-unequal($input, $expect, $desc);
-  }
+$base: ( inner-y-mults: (sm: 0.5) );
+$media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.5), size: 20px ), b: ( breakpoint: 30em, ) );
+@include m-init((output: false, basis: breakpoints));
 
-  // for mixins
-  @include test('[mixin]') {
+@include test-module('value-helpers:') {
 
-    $desc: '[what happens]';
-    @include assert($desc) {
-      @include input {
-        // content
-      }
-      @include expect {
-        // output
-      }
-    }
+  //
+  // __mult
+  @include test('__mult: return 1 if $mult is falsey') { @include assert-equal(__mult(null, 'inner-y'), 1); }
+  @include test('__mult: return $mult if $mult is unitless-number') { @include assert-equal(__mult(3, 'inner-y'), 3); }
+  @include test('__mult: assert $mult to rem V $base if it has any unit') { @include assert-equal(__mult(20px, 'inner-y'), 1.25rem); }
+  @include test('__mult: assert $mult to rem V $medium if it has any unit') { @include assert-equal(__mult(20px, 'inner-y', 'a'), 1rem); }
+  @include test('__mult: return $mult for $name from $base, if $m is null') { @include assert-equal(__mult('sm', 'inner-y', null), 0.5); }
+  @include test('__mult: return $mult for $name from $medium, if $m is specified') { @include assert-equal(__mult('sm', 'inner-y', 'a'), 0.5); }
+  // NB. error if mult is string, and mult or medium are not found
 
-  }
+  //
+  // __rem
+
+  //
+  // __px
+
+  // @include report(); // ??
 }
-
-
- */

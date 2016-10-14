@@ -165,7 +165,7 @@
 
   @function __rem($values, $m: $curr-m) {
     @if not $values or length($values) == 0 { @return null; }
-    $size: m-value('size', $m); $result: ();
+    $size: m-value('size', $m) or 16px; $result: ();
     @each $value in $values {
       @if unit($value) == 'px' { $result: append($result, __assert($value / __strip($size), rem), 'space'); }
       @else { $result: append($result, __assert($value, rem), 'space'); }

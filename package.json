@@ -4,7 +4,7 @@
   "description": "Sass @media breakpoints and scopes coupled to layout tools",
   "main": "_index.scss",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha tests.js"
   },
   "author": "Lu Nelson",
   "license": "MIT",
@@ -28,6 +28,10 @@
   "dependencies": {
     "sass-calc": "lunelson/sass-calc",
     "sass-maps-plus": "lunelson/sass-maps-plus",
-    "sass-to-js": "lunelson/sass-to-js"
+    "sass-to-js": "lunelson/sass-to-js",
+    "mocha": "^3.1.0",
+    "sass-true": "^2.1.3",
+    "sassdoc": "^2.1.20",
+    "sassdocify": "^0.3.4"
   }
 }
