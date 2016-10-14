@@ -6,23 +6,19 @@
   $base: () !default;
   $media: () !default;
   $fonts: () !default;
-
   $base-orig: () !default;
   $media-orig: () !default;
-
   $globals: () !default;
-
   $curr-m: null !default; // key
   $curr-font: null !default; // key
-
   $curr-size: null !default; // key | value
   $curr-line: null !default; // key | value
   $curr-inner-y: null !default; // key | value
   $curr-inner-x: null !default; // key | value
   $curr-outer-y: null !default; // key | value
   $curr-outer-x: null !default; // key | value
-
   $curr-stack: null !default; // selector
+
 
 //
 // init defaults ✅
@@ -64,7 +60,7 @@
     grid-columns: 4,
   );
 
-  $media-type-defaults: (
+  $media-basis-defaults: (
     columns: (
       c4: ( grid-columns: 4 ),
       c6: ( grid-columns: 6 ),
@@ -81,7 +77,7 @@
   );
 
   $init-options-default: (
-    init-type: columns, // columns | breakpoints
+    init-basis: columns, // columns | breakpoints
     init-outer: true,
     init-wrap: true,
     init-grid: true,

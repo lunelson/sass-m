@@ -2,17 +2,26 @@
 // init mixins
 // --------------------------------------------------------------------------
 
-  @mixin f-init() {
+  @mixin init-fonts() {
+
     // if length of fonts is 0, merge fonts-default against it;
+    $fonts: if(length($fonts) > 0, $fonts, $fonts-default) !global;
+
     // for each font in fonts, merge font against font-default
+    @each $f, $font in $fonts {
+      $font: map-merge($font-default, $font);
+      $fonts: map-merge($fonts, ($f: $font)) !global;
+    }
   }
 
   @mixin m-init($options: ()){
 
-    $options: map-merge($init-options-default, $options);
+    // init fonts
+    @include init-fonts();
 
     // parse out $options
-    $type: map-get($options, 'init-type');
+    $options: map-merge($init-options-default, $options);
+    $basis: map-get($options, 'init-basis');
     $output: map-get($options, 'output');
 
     // backup $base spec; merge spec against $medium-default
@@ -20,7 +29,7 @@
     $base: __normalize-medium(map-merge($medium-default, $base)) !global;
 
     // if $media is empty, assign a default based on type; backup $media
-    $media: if(length($media) > 0, $media, map-get($media-type-defaults, $type)) !global;
+    $media: if(length($media) > 0, $media, map-get($media-basis-defaults, $basis)) !global;
     $media-orig: $media !global;
 
     // create $current, as recursive merge target
@@ -29,7 +38,7 @@
     @each $m, $medium in $media {
 
       // setup $current by type, per $medium
-      $current: call('__setup-medium-by-#{$type}', $current, $medium);
+      $current: call('__setup-medium-by-#{$basis}', $current, $medium);
 
       // merge $current back to $media
       $media: map-merge($media, ($m: $current)) !global;

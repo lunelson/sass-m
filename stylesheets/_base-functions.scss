@@ -1,90 +1,4 @@
 //
-// utilities [private]
-// --------------------------------------------------------------------------
-
-  @function __nth($list, $n) {
-    // TODO allow it to handle strings; create str-nth
-    @if length($list) == 0 or $n < 1 or $n > length($list) { @return null; }
-    @return nth($list, $n);
-  }
-
-  @function __first($list) {
-    @return __nth($list, 1);
-  }
-
-  @function __last($list) {
-    @return __nth($list, length($list));
-  }
-
-  @function __contains-any($list, $items) {
-    @each $item in $items { @if index($list, $item) { @return true; } }
-    @return false;
-  }
-
-  // TODO: make sure slice supports same logic/signature as native str-slice function
-  @function __slice($list, $start: 1, $end: length($list), $sep: list-separator($list)) {
-    $output: ();
-    @if $start >= 1 and $end >= $start {
-      @for $i from $start through $end {
-        $output: append($output, nth($list, $i), $sep);
-      }
-    }
-    // @return if(length($output)==1,nth($output,1),$output);
-    @return $output;
-  }
-
-  @function __normalize-arglist($arglist...) {
-    @if length($arglist) == 1 and type-of(nth($arglist, 1)) == list {
-      $arglist: join((), nth($arglist, 1), 'comma');
-    }
-    @return $arglist;
-  }
-
-  @function __range-pairs($list, $head: true, $tail: true) {
-    @if length($list) == 0 { @return $list; }
-    $result: ();
-    @for $n from 1 through length($list) + 1 {
-      $m: $n - 1; $a: if($m == 0, null, nth($list, $m));
-      $b: if($n > length($list), null, nth($list, $n));
-      $result: append($result, ($a $b), 'comma');
-    }
-    $length: length($result);
-    $start: if($head, 1, 2);
-    $end: if($tail, $length, $length - 1);
-    @return __slice($result, $start, $end);
-  }
-
-  @function __get($map, $keys...) {
-    @if type-of($map) != 'map' or length($map) == 0 { @error 'non-map or zero-length-map passed to __get'; }
-    @each $key in $keys {
-      @if type-of($map) != 'map' { @return $map; }
-      $map: map-get($map, $key);
-    }
-    @return $map;
-  }
-
-  @function __one($unit:'') {
-    $ones: ('em': 1em, 'ex': 1ex, 'ch': 1ch, 'rem': 1rem, '%': 1%, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax, 'cm': 1cm, 'mm': 1mm, 'in': 1in, 'px': 1px, 'pt': 1pt, 'pc': 1pc, 'deg': 1deg, 'grad': 1grad, 'rad': 1rad, 'turn': 1turn, 's': 1s, 'ms': 1ms, 'dpi': 1dpi, 'dpcm': 1dpcm, 'dppx': 1dppx);
-    @return map-get($ones, $unit) or 1;
-  }
-
-  @function __strip($value) {
-    @if type-of($value) != 'number' { @error 'non-number passed to __strip'}
-    @return if(unitless($value), $value, $value / __one(unit($value)));
-  }
-
-  @function __assert($value, $unit: '') {
-    @if type-of($value) != 'number' { @error 'non-number passed to __assert'}
-    @return __strip($value) * __one($unit);
-  }
-
-  @function __convert($value, $unit: '') {
-    @if type-of($value) != 'number' { @error 'non-number passed to __convert'}
-    @return __one($unit) + __strip($value);
-  }
-
-
-//
 // init helpers [private] ✅
 // --------------------------------------------------------------------------
 
@@ -271,16 +185,13 @@
 
 
 
-  @function f($font: $curr-font) {
+  @function font($font: $curr-font) {
+    $font: $font or 'base';
     @return map-get($fonts, $font);
   }
 
-  @function f-value($value, $font: $curr-font) {
-    @return __get($fonts, $font, $value);
-  }
-
-  @function font-family($font: $curr-font) {
-    @return __get($fonts, $font, 'font-family');
+  @function font-value($value, $font: $curr-font) {
+    @return map-get(font($font), $value);
   }
 
 
@@ -291,21 +202,21 @@
 
   // m object
   @function m($m: $curr-m) {
-    @return map-get($media, $m);
+    @return if($m, map-get($media, $m), $base);
   }
 
   @function m-orig($m: $curr-m) {
-    @return map-get($media, $m);
+    @return if($m, map-get($media-orig, $m), $base-orig);
   }
 
 
   // generic m value
   @function m-value($value, $m: $curr-m) {
-    @return if($m, __get($media, $m, $value), __get($base, $value));
+    @return map-get(m($m), $value);
   }
 
   @function m-orig-value($value, $m: $curr-m) {
-    @return if($m, __get($media-orig, $m, $value), __get($base-orig, $value));
+    @return map-get(m-orig($m), $value);
   }
 
 
@@ -341,10 +252,11 @@
 
   // mult, font
   @function size($mult: $curr-size, $font: $curr-font) {
-    @return __mult($mult, 'size') * 1rem * f-value('size-adjust', $font);
+    @return __mult($mult, 'size') * 1rem * font-value('size-adjust', $font);
   }
+
   @function line($mult: $curr-line, $font: $curr-font) {
-    @return __mult($mult, 'line') * m-value('line') / f-value('size-adjust', $font);
+    @return __mult($mult, 'line') * m-value('line') / font-value('size-adjust', $font);
   }
 
 
@@ -355,10 +267,10 @@
   // line, font, type
   @function trim-value($line: $curr-line, $font: $curr-font, $type: 'ex'){
     $lh: line($line, $font);
-    $em: f-value('em-adjust', $font);
-    $ex: f-value('ex-adjust', $font);
+    $em: font-value('em-adjust', $font) * 1em;
+    $ex: font-value('ex-adjust', $font) * 1ex;
     $deltas: (em: 0, ex: subtract($em, $ex), mx: subtract($em/2, $ex/2));
-    @return add(($lh * 1em - $em) / 2), map-get($deltas, $type);
+    @return add((($lh * 1em - $em) / 2), map-get($deltas, $type));
   }
 
 
@@ -366,12 +278,15 @@
   @function trim-margin($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font, $type: 'ex') {
     @return subtract(inner-y($mult), trim-value($line, $font, $type));
   }
+
   @function trim-margin-ex($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font) {
     @return subtract(inner-y($mult), trim-value($line, $font, 'ex'));
   }
+
   @function trim-margin-em($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font) {
     @return subtract(inner-y($mult), trim-value($line, $font, 'em'));
   }
+
   @function trim-margin-mx($mult: $curr-inner-y, $line: $curr-line, $font: $curr-font) {
     @return subtract(inner-y($mult), trim-value($line, $font, 'mx'));
   }

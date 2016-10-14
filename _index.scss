@@ -2,6 +2,11 @@
 @import 'node_modules/sass-calc/index';
 @import 'node_modules/sass-maps-plus/index';
 
+// utilities
+@import 'stylesheets/util-configs';
+@import 'stylesheets/util-functions';
+@import 'stylesheets/util-mixins';
+
 // base
 @import 'stylesheets/base-configs';
 @import 'stylesheets/base-functions';
@@ -26,8 +31,3 @@
 @import 'stylesheets/stack-configs';
 @import 'stylesheets/stack-functions';
 @import 'stylesheets/stack-mixins';
-
-// util
-@import 'stylesheets/util-configs';
-@import 'stylesheets/util-functions';
-@import 'stylesheets/util-mixins';

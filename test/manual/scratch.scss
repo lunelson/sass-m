@@ -13,19 +13,30 @@ $media: (
 
 @include m-init((init-type: breakpoints, output: false));
 
-.debug {
-  out: inspect(m-value(scale));
-  out: inspect(m-value(size));
-  out: inspect($curr-m);
-
-  @include m(a,b) {
-
-    out: inspect(m-value(scale));
-    out: inspect(m-value(size));
-    out: inspect($curr-m);
+.content {
+  @include stack(2, 1.2) {
+    h1 {
+      @include trim((excl: 'div' 'dl'));
+      // out: inspect(font());
+      // out: inspect(trim-value());
+    }
   }
 }
 
+// .debug {
+//   out: inspect(m-value(scale));
+//   out: inspect(m-value(size));
+//   out: inspect($curr-m);
 
+//   @include m(a,b) {
+
+//     out: inspect(m-value(scale));
+//     out: inspect(m-value(size));
+//     out: inspect($curr-m);
+//   }
+// }
+
+
+/* fonts: #{map-stringify($fonts)} */
 /* base: #{map-stringify($base)} */
 /* media: #{map-stringify($media)} */
