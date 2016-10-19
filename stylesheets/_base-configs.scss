@@ -9,15 +9,18 @@
   $base-orig: () !default;
   $media-orig: () !default;
   $globals: () !default;
-  $curr-m: null !default; // key
-  $curr-font: null !default; // key
-  $curr-size: null !default; // key | value
-  $curr-line: null !default; // key | value
-  $curr-inner-y: null !default; // key | value
-  $curr-inner-x: null !default; // key | value
-  $curr-outer-y: null !default; // key | value
-  $curr-outer-x: null !default; // key | value
-  $curr-stack: null !default; // selector
+
+  $init-done: false;
+
+  $curr-m: null; // key
+  $curr-font: null; // key
+  $curr-size: null; // key | value
+  $curr-line: null; // key | value
+  $curr-inner-y: null; // key | value
+  $curr-inner-x: null; // key | value
+  $curr-outer-y: null; // key | value
+  $curr-outer-x: null; // key | value
+  $curr-stack: null; // selector
 
 
 //

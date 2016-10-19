@@ -1,0 +1,269 @@
+//
+// init helpers [private] ✅
+// --------------------------------------------------------------------------
+
+//
+// [private] query helpers
+// --------------------------------------------------------------------------
+
+//
+// value getters, base ✅
+// --------------------------------------------------------------------------
+
+
+  @include test-module('value-getters-base') {
+
+
+    @include test('[function] font') {
+
+      $desc: 'error if font not found';
+      $foo: font('bar'); $err: "$font 'bar' not found";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'get font by name';
+      $output: inspect(font('mono'));
+      $expect: inspect((family: monaco, consolas, "lucida console", monospace, em-adjust: 1, ex-adjust: 1, size-adjust: 1, spacing-max: 0.5, spacing-end: 50));
+      @include assert-equal($output, $expect, $desc);
+    }
+
+    @include test('[function] m') {
+
+      $desc: 'error if medium not found';
+      $foo: m('bar'); $err: "medium 'bar' not found in $media";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'get medium by name';
+      $output: inspect(m('a'));
+      $expect: inspect((size: 20px, size-mults: (), line: 1.5, line-mults: (), inner-x: 2rem, inner-x-mults: (), inner-y: 2rem, inner-y-mults: (sm: 0.5), outer-top: 2rem, outer-bottom: 2rem, outer-y-mults: (), outer-right: 2rem, outer-left: 2rem, outer-x-mults: (), reading-width: 24rem, reading-columns: 4, grid-columns: 4, "scale": 1.25, breakpoint: 20em, "content-width": 12rem));
+      @include assert-equal($output, $expect, $desc);
+    }
+
+    @include test('[function] m-orig') {
+
+      $desc: 'error if original medium not found';
+      $foo: m-orig('bar'); $err: "original medium 'bar' not found in $media";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'get original medium by name';
+      $output: inspect(m-orig('a'));
+      $expect: inspect((breakpoint: 20em, inner-y-mults: (sm: 0.5), size: 20px));
+      @include assert-equal($output, $expect, $desc);
+    }
+  }
+
+
+//
+// value getters, generic
+// --------------------------------------------------------------------------
+
+
+  @include test-module('value-getters-generic') {
+
+
+    @include test('[function] font-value') {
+
+      $desc: 'error if value not found in $font';
+      $foo: font-value('bar'); $err: "key 'bar' not found in $font 'base'";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'return value by name';
+      @include assert-equal(font-value('family'), (arial, sans-serif), $desc);
+      @include assert-equal(font-value('family', 'mono'), (monaco, consolas, "lucida console", monospace), $desc);
+    }
+
+    @include test('[function] m-value') {
+
+      $desc: 'error if value not found in $base';
+      $foo: m-value('bar'); $err: "key 'bar' not found in $base";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'error if value not found in $medium';
+      $foo: m-value('bar', 'a'); $err: "key 'bar' not found in $medium 'a'";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'return value by name';
+      @include assert-equal(m-value('size'), 16px, $desc);
+      @include assert-equal(m-value('size', 'a'), 20px, $desc);
+    }
+
+    @include test('[function] m-orig-value') {
+
+      $desc: 'error if value not found in $base-orig';
+      $foo: m-orig-value('bar'); $err: "key 'bar' not found in $base-orig";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'error if value not found in $medium-orig';
+      $foo: m-orig-value('bar', 'a'); $err: "key 'bar' not found in $medium-orig 'a'";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'return value by name, or null if not present in orig';
+      @include assert-equal(m-orig-value('size', 'a'), 20px, $desc);
+      @include assert-equal(m-orig-value('size', 'b'), null, $desc);
+    }
+  }
+
+
+//
+// [private] value helpers ✅
+// --------------------------------------------------------------------------
+
+  @include test-module('value-helpers') {
+
+
+    @include test('[function] __mult') {
+
+      $desc: 'error if arguments fall through';
+      $err: "either $mult or $name argument is not a string";
+      $foo: __mult((bar: 2), 'size');
+      @include assert-equal(last-error(), $err, $desc);
+      $foo: __mult('sm', (bar: 2));
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'return 1 if $mult is falsey';
+      @include assert-equal(__mult(null, 'inner-y'), 1, $desc);
+
+      $desc: 'return $mult if $mult is unitless-number';
+      @include assert-equal(__mult(3, 'inner-y'), 3, $desc);
+
+      $desc: 'assert $mult to rem V $base if it has any unit';
+      @include assert-equal(__mult(20px, 'inner-y'), 1.25rem, $desc);
+
+      $desc: 'assert $mult to rem V $medium if it has any unit';
+      @include assert-equal(__mult(20px, 'inner-y', 'a'), 1rem, $desc);
+
+      $desc: 'return $mult for $name from $base, if $m is null';
+      @include assert-equal(__mult('sm', 'inner-y', null), 0.5, $desc);
+
+      $desc: 'return $mult for $name from $medium, if $m is specified';
+      @include assert-equal(__mult('sm', 'inner-y', 'a'), 0.5, $desc);
+
+      $desc: 'error if mults map is not found';
+      $foo: __mult('sm', 'inner-z'); $err: "no mults-map named 'inner-z-mults'";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'error if mult is not found';
+      $foo: __mult('lg', 'inner-y'); $err: "no mult named 'lg' in 'inner-y-mults'";
+      @include assert-equal(last-error(), $err, $desc);
+    }
+
+    @include test('[function] __rem') {
+
+      $desc: 'return null if 0-length args';
+      @include assert-equal(__rem(()), null, $desc);
+
+      $desc: 'correctly convert px inputs to rem V $base';
+      @include assert-equal(__rem(10px 20px 30px), 0.625rem 1.25rem 1.875rem, $desc);
+
+      $desc: 'correctly convert px inputs to rem V $medium';
+      @include assert-equal(__rem(10px 20px 30px, a), 0.5rem 1rem 1.5rem, $desc);
+
+      $desc: 'correctly assert all other inputs to rem';
+      @include assert-equal(__rem(1 2em 0.5), 1rem 2rem 0.5rem, $desc);
+
+      $desc: 'return single item if passed single or 1-length list';
+      @include assert-equal(length(__rem((2))), 1, $desc);
+
+      $desc: 'return list of items if passed more than 1';
+      @include assert-equal(length(__rem(2 3 4)), 3, $desc);
+
+      $desc: 'error if $values is not a number or list';
+      $foo: __rem('hello'); $err: "$values argument must be number or list of numbers";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'error if any $value in $values is not a number';
+      $foo: __rem(6px 2em 'hello'); $err: "a $value in $values was a non-number";
+      @include assert-equal(last-error(), $err, $desc);
+    }
+
+    @include test('[function] __px') {
+
+      $desc: 'return null if 0-length args';
+      @include assert-equal(__px(()), null);
+
+      $desc: 'correctly leave px inputs as px';
+      @include assert-equal(__px(10px 20px 30px), 10px 20px 30px);
+
+      $desc: 'correctly convert other units to px V $base';
+      @include assert-equal(__px(1rem 2em 3ex), 16px 32px 48px);
+
+      $desc: 'correctly convert other units to px V $medium';
+      @include assert-equal(__px(1rem 2em 3ex,a), 20px 40px 60px);
+
+      $desc: 'return single item if passed single or 1-length list';
+      @include assert-equal(length(__px((2))), 1);
+
+      $desc: 'return list of items if passed more than 1';
+      @include assert-equal(length(__px(2 3 4)), 3);
+
+      $desc: 'error if $values is not a number or list';
+      $foo: __px('hello'); $err: "$values argument must be number or list of numbers";
+      @include assert-equal(last-error(), $err, $desc);
+
+      $desc: 'error if any $value in $values is not a number';
+      $foo: __px(6px 2em 'hello'); $err: "a $value in $values was a non-number";
+      @include assert-equal(last-error(), $err, $desc);
+    }
+  }
+
+//
+// value getters, simple [test not needed]
+// --------------------------------------------------------------------------
+
+
+  // @include test-module('value-getters-simple') {
+  //
+  //   $desc: 'get the right thing';
+  //   @include test('[function] inner-x') {
+  //     @include assert-equal(inner-x(), x, $desc);
+  //     @include assert-equal(inner-x(), x, $desc);
+  //   }
+  //   @include test('[function] inner-y') {
+  //     @include assert-equal(inner-y(), x, $desc);
+  //     @include assert-equal(inner-y(), x, $desc);
+  //   }
+  //   @include test('[function] outer-top') {
+  //     @include assert-equal(outer-top(), x, $desc);
+  //     @include assert-equal(outer-top(), x, $desc);
+  //   }
+  //   @include test('[function] outer-right') {
+  //     @include assert-equal(outer-right(), x, $desc);
+  //     @include assert-equal(outer-right(), x, $desc);
+  //   }
+  //   @include test('[function] outer-bottom') {
+  //     @include assert-equal(outer-bottom(), x, $desc);
+  //     @include assert-equal(outer-bottom(), x, $desc);
+  //   }
+  //   @include test('[function] outer-left') {
+  //     @include assert-equal(outer-left(), x, $desc);
+  //     @include assert-equal(outer-left(), x, $desc);
+  //   }
+  // }
+
+
+//
+// value getters, complex [auto m resolution]
+// --------------------------------------------------------------------------
+
+
+  @include test-module('value-getters-complex') {
+
+
+    @include test('[function] size') {
+      $desc: 'error if mult does not resolve';
+      $foo: size('bar'); $err: "$mult argument must resolve to unitless number";
+      @include assert-equal(last-error(), $err, $desc);
+    }
+
+    @include test('[function] line') {
+      $desc: 'error if mult does not resolve';
+      $foo: line('bar'); $err: "$mult argument must resolve to unitless number";
+      @include assert-equal(last-error(), $err, $desc);
+    }
+    // @include test('[function] auto-line') {}
+    // @include test('[function] trim-value') {}
+    // @include test('[function] trim-margin') {}
+    // @include test('[function] trim-margin-ex') {}
+    // @include test('[function] trim-margin-em') {}
+    // @include test('[function] trim-margin-mx') {}
+  }
+

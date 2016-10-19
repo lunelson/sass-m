@@ -1,30 +1,10 @@
-.test {
-  out: 1.25rem;
-  out: (size: 16px, size-mults: (), line: 1.5, line-mults: (), inner-x: 2rem, inner-x-mults: (), inner-y: 2rem, inner-y-mults: (sm: 0.5), outer-top: 2rem, outer-bottom: 2rem, outer-y-mults: (), outer-right: 2rem, outer-left: 2rem, outer-x-mults: (), reading-width: 24rem, reading-columns: 4, grid-columns: 4, "scale": 1);
-  out: (sm: 0.5);
-  out: 0.5;
-}
-
-.content {
-  padding-top: 0.1px;
-  padding-bottom: 0.1px;
-}
-
-.content > * + * {
-  margin-top: 3rem;
-}
-
-.content h1 {
-  line-height: 1.8;
-}
-
-.content > h1 {
-  margin-top: calc(0rem - 0.4em);
-  margin-bottom: calc(0rem - 0.4em);
-}
-
-.content > *:not(div):not(dl):not(.m-block) + h1 {
-  margin-top: calc(2rem - (0.4em + (1em - 1ex)));
+.post-init {
+  out: 2rem;
+  out: 1rem;
+  out: 1.5rem;
+  out: true;
+  out: false;
+  err: "$values argument must be number or list of numbers";
 }
 
 /* fonts: (
@@ -91,7 +71,7 @@
     ),
     inner-y: 2rem,
     inner-y-mults: (
-      sm: 0.5
+      sm: 0.75
     ),
     outer-top: 2rem,
     outer-bottom: 2rem,
@@ -121,7 +101,7 @@
     ),
     inner-y: 2rem,
     inner-y-mults: (
-      sm: 0.5
+      sm: 0.75
     ),
     outer-top: 2rem,
     outer-bottom: 2rem,

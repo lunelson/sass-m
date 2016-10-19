@@ -4,7 +4,8 @@
   "description": "Sass @media breakpoints and scopes coupled to layout tools",
   "main": "_index.scss",
   "scripts": {
-    "test": "mocha tests.js"
+    "test": "mocha test.js",
+    "test-alt": "nodemon --exec \"mocha test.js || true\""
   },
   "author": "Lu Nelson",
   "license": "MIT",

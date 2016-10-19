@@ -71,6 +71,7 @@
       // @if map-get($options, 'init-typo') { @include init-typo(); }
 
     }
+    $init-done: true !global;
   }
 
 //

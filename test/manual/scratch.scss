@@ -1,51 +1,22 @@
 @import '../../index';
 
-$media: (
-  a: (
-    breakpoint: 20em,
-    inner-y-mults: (sm: 0.5),
-    size: 20px
-  ),
-  b: (
-    breakpoint: 30em,
+$catch-throws: true;
 
-  )
-);
+.pre-init {}
 
 $base: ( inner-y-mults: (sm: 0.5) );
-@include m-init((basis: breakpoints, output: false));
+$media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.75), size: 20px ), b: ( breakpoint: 30em, ) );
+@include m-init((output: false, basis: breakpoints));
 
-.test {
-  out: inspect(__rem(20px));
-  out: inspect(m());
-  out: inspect(m-value('inner-y-mults'));
-  out: inspect(__mult('sm', 'inner-y', null));
+.post-init {
+  out: inner-y();
+  out: inner-y(sm);
+  out: inner-y(sm, a);
+  out: __rem(10px 20px 30px);
+  out: __is-list(10px 20px 30px);
+  out: __is-number(10px 20px 30px);
+  err: last-error();
 }
-
-
-.content {
-  @include stack(3rem, 1.2) {
-    h1 {
-      @include trim((excl: 'div' 'dl'));
-      // out: inspect(font());
-      // out: inspect(trim-value());
-    }
-  }
-}
-
-// .debug {
-//   out: inspect(m-value(scale));
-//   out: inspect(m-value(size));
-//   out: inspect($curr-m);
-
-//   @include m(a,b) {
-
-//     out: inspect(m-value(scale));
-//     out: inspect(m-value(size));
-//     out: inspect($curr-m);
-//   }
-// }
-
 
 /* fonts: #{map-stringify($fonts)} */
 /* base: #{map-stringify($base)} */
