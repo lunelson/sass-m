@@ -8,31 +8,61 @@ write the auto-line() function and corresp. tests
 - update mm-for related functions
 - update references to line-height, font-size etc.
 
+## keep on with structure
 
-### create and use sass-to-js
+_index
 
-```scss
-@function set-css-data($map){} // use json-encode or whatever, internally
-```
+stylesheets/
 
-```js
-function getCssData(){} // use JSON.parse internally
-```
+  grid/
+    functions.scss
+      _grid-width
+      cell-width // for pushing elements
 
-//
-// TODO
-//
-// => rename variables with double underscores
+    mixins.scss
+      _cell-padding
+      _grid-margins
+      _float-cell
+      _float-grid
+      _flex-cell
+      _flex-grid
+      _degrid
+      cell
+      grid
+      regrid
+      ungrid
+      cell-push
+      cell-span
+      cell-cycle
+      grid-debug
+    setup.scss
+      setup-grid
 
-    // $__medium-default: ();
+  page/
+    mixins/
+      outer
+      wrap
+      unwrap
 
-    // $__base:
-    // $__media:
-    // $__fonts:
+  stack/
+    mixins.scss
+      stack
+    setup.scss
+      setup-stack
 
-    // $__base-orig: ();
-    // $__media-orig: ();
+  typo/
+    mixins.scss
+      typo
+    setup.scss
+      setup-typo
 
-    // $__curr-font:
-    // $__curr-line:
-    // $__curr-size:
+  util/
+    functions.scss
+    mixins.scss
+      clip, hide, show, hold
+    setup.scss
+      setup-fonts
+      setup-outer
+      setup-wrap
+      setup-unwrap
+      setup-hold

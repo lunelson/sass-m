@@ -4,61 +4,6 @@ _index
 
 stylesheets/
 
-  base/
-    functions.scss
-      _media
-      _media-orig
-      _base
-      _base-orig
-      _fonts
-        ...
-          size
-          family
-          em-height
-          ex-height
-          spacing-max
-          spacing-end
-
-      _parse-mult
-      _get-props-for
-      _get-media-for
-      _normalize-medium
-      _build-query-string
-      _setup-m-by-breakpoint
-      _setup-m-by-columns
-
-      m(m) // current medium
-      m-orig(m) // original medium
-      m-value(key, m) // medium-value
-      m-orig-value(key, m)
-
-      font
-      size
-      line
-      trim-ex
-      trim-em
-      inner-x
-      inner-y
-      inner-y--ex
-      inner-y--em
-      outer-top
-      outer-right
-      outer-bottom
-      outer-left
-
-    mixins
-      m
-      mm-at
-      mm-for
-      mm
-
-    setups
-      setup-m(baseMap, mediaMap, fontsMap, options)
-        - options: setup-type, js-globals, do-grid,-stack,-typo
-        - setup base, media ( --by-breakpoint | --by-columns )
-          - output base and media as data
-        - setup fonts, outer, wrap, unwrap
-
   grid/
     functions.scss
       _grid-width
