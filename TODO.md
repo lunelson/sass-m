@@ -1,4 +1,9 @@
-## todo
+## testing
+
+add a couple of test on value-getter-base functions
+write the auto-line() function and corresp. tests
+
+## confirm
 
 - update mm-for related functions
 - update references to line-height, font-size etc.

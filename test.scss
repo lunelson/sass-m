@@ -17,19 +17,19 @@ $catch-throws: true;
 @include test-module('value-getters-base [before init]') {
 
   @include test('[function] font') {
-    $desc: 'ERROR if m-init has not been run';
+    $desc: 'error if m-init has not been run';
     $foo: font();
     @include assert-equal(last-error(), "m not initialized; please '@include m-init()'", $desc);
   }
 
   @include test('[function] m') {
-    $desc: 'ERROR if m-init has not been run';
+    $desc: 'error if m-init has not been run';
     $foo: m();
     @include assert-equal(last-error(), "m not initialized; please '@include m-init()'", $desc);
   }
 
   @include test('[function] m-orig') {
-    $desc: 'ERROR if m-init has not been run';
+    $desc: 'error if m-init has not been run';
     $foo: m-orig();
     @include assert-equal(last-error(), "m not initialized; please '@include m-init()'", $desc);
   }
@@ -44,5 +44,4 @@ $base: ( inner-y-mults: (sm: 0.5) );
 $media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.5), size: 20px ), b: ( breakpoint: 30em, ) );
 @include m-init((output: false, basis: breakpoints));
 
-@import 'test/value-helpers';
-@import 'test/value-getters';
+@import 'test/test-base-functions';
