@@ -1,0 +1,126 @@
+
+////////////////////////////
+// MEDIA PUBLIC FUNCTIONS //
+////////////////////////////
+
+
+//
+// value getters, base ✅
+// --------------------------------------------------------------------------
+
+
+@function medium($m: $curr-m) {
+  @if not $done-inits { @return error("m not initialized; please '@include init-m()'"); }
+  @if $m { @return map-get($media, $m) or error("medium '#{$m}' not found in $media");}
+  @return $base;
+}
+
+
+@function medium-orig($m: $curr-m) {
+  @if not $done-inits { @return error("m not initialized; please '@include init-m()'"); }
+  @if $m { @return map-get($media-orig, $m) or error("original medium '#{$m}' not found in $media"); }
+  @return $base-orig;
+}
+
+
+//
+// value getters, generic
+// --------------------------------------------------------------------------
+
+
+@function medium-value($value-key, $m: $curr-m) {
+  $medium: medium($m);
+  @if $medium {
+    $medium-desc: if($m, "$medium '#{$m}'", "$base");
+    @return map-get($medium, $value-key) or error("key '#{$value-key}' not found in #{$medium-desc}");
+  }
+  @return $medium; // will be null if $throw-catch is true; otherwise will have @error'd out
+}
+
+  // alias of above
+  @function mval($args...) { @return medium-value($args...);}
+
+
+@function medium-orig-value($value-key, $m: $curr-m) {
+  $medium-orig: medium-orig($m);
+  @if $medium-orig {
+    $medium-desc: if($m, "$medium-orig '#{$m}'", "$base-orig");
+    @return map-get($medium-orig, $value-key) or error("key '#{$value-key}' not found in #{$medium-desc}");
+  }
+  @return $medium-orig; // will be null if $throw-catch is true; otherwise will have @error'd out
+}
+
+
+//
+// value getters, simple ✅
+// --------------------------------------------------------------------------
+
+
+@function inner-x($mult: $curr-inner-x, $m: $curr-m) {
+  $mult: __mult($mult, 'inner-x', $m);
+  @return if(is-unitless($mult), $mult * medium-value('inner-x', $m), $mult);
+}
+
+
+@function inner-y($mult: $curr-inner-y, $m: $curr-m) {
+  $mult: __mult($mult, 'inner-y', $m);
+  @return if(is-unitless($mult), $mult * medium-value('inner-y', $m), $mult);
+}
+
+
+@function outer-top($mult: $curr-outer-y, $m: $curr-m) {
+  $mult: __mult($mult, 'outer-y', $m);
+  @return if(is-unitless($mult), $mult * medium-value('outer-top', $m), $mult);
+}
+
+
+@function outer-right($mult: $curr-outer-x, $m: $curr-m) {
+  $mult: __mult($mult, 'outer-x', $m);
+  @return if(is-unitless($mult), $mult * medium-value('outer-right', $m), $mult);
+}
+
+
+@function outer-bottom($mult: $curr-outer-y, $m: $curr-m) {
+  $mult: __mult($mult, 'outer-y', $m);
+  @return if(is-unitless($mult), $mult * medium-value('outer-bottom', $m), $mult);
+}
+
+
+@function outer-left($mult: $curr-outer-x, $m: $curr-m) {
+  $mult: __mult($mult, 'outer-x', $m);
+  @return if(is-unitless($mult), $mult * medium-value('outer-left', $m), $mult);
+}
+
+//
+// value getters, complex [auto m resolution]
+// --------------------------------------------------------------------------
+
+
+// mult, font
+@function size($size: $curr-size, $font: $curr-font) {
+  $mult: __mult($size, 'size');
+  @if not is-unitless($mult) { @return error("$mult argument must resolve to unitless number"); }
+  @return $mult * 1rem * font-value('size-adjust', $font);
+}
+
+
+@function line($line: $curr-line, $font: $curr-font) {
+  $mult: __mult($line, 'line');
+  @if not is-unitless($mult) { @return error("$mult argument must resolve to unitless number"); }
+  @return $mult * medium-value('line') / font-value('size-adjust', $font);
+}
+
+
+// size, font
+@function auto-line($size: $curr-size, $font: $curr-font) {
+  $size: size($size, $font);
+  $div: font-value('line-div', $font);
+  $min: font-value('line-min', $font);
+  $rel: line() / strip($size);
+  @return ceil($min / $rel * $div) / $div / strip($size);
+}
+
+// class helpers
+
+@function base-class($base) { @return selector-parse('.#{$base}, [class^="#{$base}--"], [class*=" #{$base}--"]'); }
+@function mult-class($base, $m) { @return selector-parse(if($m=='base', '.#{$base}', '.#{$base}--#{$m}')); }

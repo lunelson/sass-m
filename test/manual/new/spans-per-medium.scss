@@ -1,0 +1,57 @@
+/*
+  1. universal explicit spans up to maximum $cols
+  2. per-query explicit--mod spans (!important)
+  3. per-query implicit spans
+  4. per-query implicit--mod spans (!important)
+
+  1. universal explicit push/pull, left/right, up to maximum $cols - 1
+  2. per-query explicit--mod push/pull, left/right, up to maximum $cols - 1 (!important)
+  3. per-query implicit push/pull, left/right, up to maximum $cols - 1
+  4. per-query implicit--mod push/pull, left/right, up to maximum $cols - 1 (!important)
+ */
+
+@import '../../index';
+
+$gc: 12;
+
+@mixin grid-setup($ns:"") {
+  @for $d from 1 through $gc {
+    @for $n from 1 through $d {
+      $gcd: gcd($n,$d);
+      $x: $n/$gcd;
+      .#{$ns}__#{$n}-#{$d} {
+        @if $x < $n {
+          @extend .#{$ns}__#{$x}-#{$d/$gcd};
+        } @else {
+          width: $n/$d*100%;
+        }
+      }
+    }
+  }
+}
+
+// @include grid-setup('bp-c6');
+
+@function span-map($cols: 12) {
+  $result: ();
+  @for $d from 1 through $cols {
+    @for $n from 1 through $d {
+      $key: reduce-fraction($n, $d);
+      $list: map-get($result, $key) or ();
+      $list: append($list, 'span-#{$n}-#{$d}');
+      @if $d == $cols { $list: append($list, 'span-#{$n}'); }
+      $result: map-merge($result, ($key: $list));
+    }
+  }
+  @return $result;
+}
+
+$spans: span-map();
+@function classify($string) { @return ".#{$string}"; }
+$class: map-list(map-get($spans, (1,4)), 'classify');
+#{$class} {
+  test: 'hello world';
+  list: '#{inspect(map-get($spans, (1,4)))}';
+}
+
+/* #{map-stringify($spans)} */

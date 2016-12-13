@@ -1,0 +1,114 @@
+// @import 'sass-u/index';
+@import '../../../index';
+
+$done-inits: false;
+
+@function __normalize-medium($medium, $root-size: null) {
+  $root-size: $root-size or map-get($base, 'size');
+  $medium-size: map-get($medium, 'size');
+  @if unit($medium-size) != 'px' { $medium-size: strip($medium-size) * $root-size; }
+  $normalized: ( 'size': $medium-size, 'scale': strip($medium-size / 16px) );
+  @each $key, $value in map-remove($medium, 'size') {
+    @if if(is-number($value), unit($value) == 'px', false) {
+      $normalized: map-merge($normalized, ($key: $value / $medium-size));
+    }
+  }
+  @return map-merge($medium, $normalized);
+}
+
+
+@function __populate-medium-by-breakpoint($medium) {
+  $breakpoint: map-get($medium, 'breakpoint');
+  $outer-width: assert($breakpoint / map-get($medium, 'scale'), rem);
+  $outer-x: map-get($medium, 'outer-right') + map-get($medium, 'outer-left');
+  @return map-merge($medium, ('content-width': $outer-width - $outer-x));
+}
+
+
+@function __populate-medium-by-grid-columns($medium) {
+  $size: map-get($medium, 'size');
+  $inner-x: map-get($medium, 'inner-x');
+  $outer-x: map-get($medium, 'outer-right') + map-get($medium, 'outer-left');
+  $copy-width: map-get($medium, 'copy-width');
+  $copy-columns: map-get($medium, 'copy-columns');
+  $grid-columns: map-get($medium, 'grid-columns');
+  $copy-vs-grid: $copy-columns/$grid-columns;
+  $content-width: ($copy-width + $inner-x) / $copy-vs-grid - $inner-x;
+  $outer-width: $content-width + $outer-x;
+  $breakpoint: assert($outer-width * map-get($medium, 'scale'), em);
+  @return map-merge($medium, (
+    'content-width': $content-width,
+    'breakpoint': $breakpoint
+  ));
+}
+
+
+@mixin m-setup($basis: 'breakpoint') {
+
+  $base-orig: $base !global;
+  $base: __normalize-medium(data-merge($medium-default, $base), 16px) !global;
+  @if length($media) == 0 { $media: map-get($media-defaults, $basis) !global; }
+
+  $media-orig: $media !global;
+  $reference: $base;
+  @each $m, $medium in $media {
+    @if not index(map-keys($medium), $basis) { @include error('sass-m / m-setup: one of your $media does not have a #{$basis} key'); }
+    $reference: __normalize-medium(data-merge($reference, $medium));
+    $reference: call('__populate-medium-by-#{$basis}', $reference);
+    $media: map-merge($media, ($m: $reference)) !global;
+  }
+  $done-inits: true !global;
+}
+
+@mixin m-output() {
+  @if not $done-inits {
+    // @include warn('sass-m / m-output: you called m-output() before m-setup(); calling m-setup() now');
+    @include m-setup();
+  }
+  @include set-css-data(map-merge($globals, (media: $media, base: $base)));
+  @include mm-for('size') { html { font-size: medium-value('scale') * 1em; } }
+}
+
+$media: (
+  alpha: (
+    breakpoint: 20em,
+    size: 17px,
+  ),
+  beta: (
+    breakpoint: 30em,
+    size: 19px,
+    number: 3,
+    map: (a: 2, b: 4),
+    list: 2 3 4,
+  ),
+  gamma: (
+    breakpoint: 40em,
+    size: 21px,
+    number: 5,
+  ),
+);
+
+$base: (
+  size: 16px,
+  number: 2,
+  map: (a: 1, b: 2),
+  list: 1 2 3,
+);
+
+// @mixin m-setup($type: 'breakpoints') {
+//   $base: __normalize-medium($base, true) !global;
+//   $reference: $base;
+//   @each $m, $medium in $media {
+//     $reference: __normalize-medium(data-merge($reference, $medium));
+//     // TODO, with real $base and $media:
+//     // $populated: call('__populate-medium-by-#{$type}', $reference);
+//     // $media: map-merge($media, ($m: $populated)) !global;
+//     $media: map-merge($media, ($m: $reference)) !global;
+//   }
+// }
+
+// @include m-setup();
+
+@include m-output();
+
+/* $media: #{map-stringify($media)} */

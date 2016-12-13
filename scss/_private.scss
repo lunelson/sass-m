@@ -1,0 +1,230 @@
+/////////////////////////////
+// MEDIA PRIVATE FUNCTIONS //
+/////////////////////////////
+
+// @function __range-pairs($list, $ext-start: true, $ext-end: true) {
+//   @if length($list) == 0 { @return $list; }
+//   $result: ();
+//   @for $n from 1 through length($list) + 1 {
+//     $m: $n - 1; $a: if($m == 0, null, nth($list, $m));
+//     $b: if($n > length($list), null, nth($list, $n));
+//     $result: append($result, ($a $b), 'comma');
+//   }
+//   $length: length($result);
+//   $start: if($ext-start, 1, 2);
+//   $end: if($ext-end, $length, $length - 1);
+//   @return slice($result, $start, $end);
+// }
+
+//
+// init helpers ✅
+// --------------------------------------------------------------------------
+
+
+@function __normalize-medium($medium) {
+
+  // correct for size and line units/non-units
+  $size: map-get($medium, 'size');
+  $line: map-get($medium, 'line');
+  $ref-px-size: if($medium == $base, 16px, map-get($base, 'size'));
+  @if unit($size) != 'px' { $size: strip($size) * $ref-px-size; }
+  @if unit($line) == 'px' { $line: $line / $size; }
+
+  // put these in a new map
+  $normalized: (
+    'size': $size,
+    'line': $line,
+    'scale': strip($size / 16px)
+  );
+
+  // merge additional corrections if necessary
+  @each $key, $value in map-remove($medium, 'size', 'line', 'breakpoint', 'size-mults', 'line-mults', 'inner-x-mults', 'inner-y-mults', 'outer-x-mults', 'outer-y-mults') {
+    @if unit($value) == 'px' { $normalized: map-merge($normalized, ($key: $value / $size * 1rem)); }
+  }
+
+  // return merged corrections
+  @return map-merge($medium, $normalized);
+}
+
+
+@function __populate-medium-by-breakpoints($new, $old) {
+
+  // merge medium to current; normalize result
+  $new: __normalize-medium(map-merge($new, $old));
+
+  // get and merge sub-maps
+  $size-mults: map-merge(map-get($new, 'size-mults'), map-get($old, 'size-mults') or ());
+  $line-mults: map-merge(map-get($new, 'line-mults'), map-get($old, 'line-mults') or ());
+  $inner-x-mults: map-merge(map-get($new, 'inner-x-mults'), map-get($old, 'inner-x-mults') or ());
+  $inner-y-mults: map-merge(map-get($new, 'inner-y-mults'), map-get($old, 'inner-y-mults') or ());
+
+  // calc and merge additional props
+  $breakpoint: map-get($new, 'breakpoint');
+  $outer-width: assert($breakpoint / map-get($new, 'scale'), rem);
+  $outer-x: map-get($new, 'outer-right') + map-get($new, 'outer-left');
+
+  // merge these back to reference
+  @return map-merge($new, (
+    'content-width': $outer-width - $outer-x,
+    'size-mults': $size-mults,
+    'line-mults': $line-mults,
+    'inner-x-mults': $inner-x-mults,
+    'inner-y-mults': $inner-y-mults,
+  ));
+}
+
+
+@function __populate-medium-by-columns($new, $old) {
+
+  // merge medium to current; normalize result
+  $new: __normalize-medium(map-merge($new, $old));
+
+  // get and merge sub-maps
+  $size-mults: map-merge(map-get($new, 'size-mults'), map-get($old, 'size-mults') or ());
+  $line-mults: map-merge(map-get($new, 'line-mults'), map-get($old, 'line-mults') or ());
+  $inner-x-mults: map-merge(map-get($new, 'inner-x-mults'), map-get($old, 'inner-x-mults') or ());
+  $inner-y-mults: map-merge(map-get($new, 'inner-y-mults'), map-get($old, 'inner-y-mults') or ());
+
+  // calc and merge additional props
+  $size: map-get($new, 'size');
+  $inner-x: map-get($new, 'inner-x');
+  $outer-x: map-get($new, 'outer-right') + map-get($new, 'outer-left');
+
+  $copy-width: map-get($new, 'copy-width');
+  $copy-columns: map-get($new, 'copy-columns');
+  $grid-columns: map-get($new, 'grid-columns');
+  $reading-vs-grid: $copy-columns/$grid-columns;
+
+  $content-width: ($copy-width + $inner-x) / $reading-vs-grid - $inner-x;
+  $outer-width: $content-width + $outer-x;
+  $breakpoint: assert($outer-width * map-get($new, 'scale'), em);
+
+  @return map-merge($new, (
+    'content-width': $content-width,
+    'breakpoint': $breakpoint,
+    'size-mults': $size-mults,
+    'line-mults': $line-mults,
+    'inner-x-mults': $inner-x-mults,
+    'inner-y-mults': $inner-y-mults,
+  ));
+}
+
+
+//
+// query helpers
+// --------------------------------------------------------------------------
+
+
+@function __props-for($group-key){
+  $groups: (
+    size: (size-mults),
+    line: (line-mults),
+    inner-x: (inner-x-mults),
+    inner-y: (inner-y-mults),
+    outer: (outer-right outer-left outer-x-mults),
+    outer-y: (outer-top outer-bottom outer-y-mults),
+    stack: (inner-y inner-y-mults),
+    grid: (inner-x inner-x-mults grid-columns),
+    typo: (line line-mults inner-y),
+  );
+  $group-keys: map-keys($groups);
+  @if index($group-keys, $group-key) {
+    $group: map-get($groups, $group-key);
+    @each $item in $group {
+      @if index($group-keys, $item) {
+        $group: join($group, map-get($groups, $item));
+      }
+    }
+    @return $group;
+  }
+  @return $group-key;
+}
+
+
+@function __media-for($group-keys...) {
+  $group-keys: __normalize-arglist($group-keys...);
+  $props: $group-keys;
+  $media-keys: ();
+  @each $key in $group-keys {
+    $props: join($props, __props-for($key));
+  }
+
+  @each $m, $medium in $media-orig {
+    @if __contains-any(map-keys($medium), $props) {
+      $media-keys: append($media-keys, $m);
+    }
+  }
+  @return $media-keys;
+}
+
+
+@function __query-string($min: null, $max: null) {
+  $min: if(map-has-key($media, $min), __get($media, $min, 'breakpoint'), $min);
+  $max: if(map-has-key($media, $max), __get($media, $max, 'breakpoint'), $max);
+  @return 'screen'
+    + if($min, ' and (min-width: #{$min})', '')
+    + if($max, ' and (max-width: #{$max - 0.001})', '');
+}
+
+
+//
+// value helpers ✅
+// --------------------------------------------------------------------------
+
+
+@function __rem($values, $m: $curr-m) {
+  @if not $values or length($values) == 0 { @return null; }
+  @if not (is-number($values) or is-list($values)) { @return error("$values argument must be number or list of numbers"); }
+  $result: (); $size: medium-value('size', $m) or 16px;
+  @each $value in $values {
+    @if not is-number($value) { @return error("a $value in $values was a non-number"); }
+    @if unit($value) == 'px' { $result: append($result, $value / $size * 1rem, 'space'); }
+    @else { $result: append($result, assert($value, rem), 'space'); }
+  }
+  @return if(length($result) > 1, $result, nth($result, 1));
+}
+
+
+@function __px($values, $m: $curr-m) {
+  @if not $values or length($values) == 0 { @return null; }
+  @if not (is-number($values) or is-list($values)) { @return error("$values argument must be number or list of numbers"); }
+  $result: (); $size: medium-value('size', $m) or 16px;
+  @each $value in $values {
+    @if not is-number($value) { @return error("a $value in $values was a non-number"); }
+    @if unit($value) == 'px' { $result: append($result, $value, 'space'); }
+    @else { $result: append($result, strip($value) * $size, 'space'); }
+  }
+  @return if(length($result) > 1, $result, nth($result, 1));
+}
+
+
+@function __mult($mult, $name, $m: $curr-m) {
+  @if not $mult { @return 1; }
+  @else if is-unitless($mult) { @return $mult; }
+  @else if is-number($mult) { @return __rem($mult, $m); }
+  @else if is-string($mult) and is-string($name) {
+    $mults: medium-value('#{$name}-mults', $m);
+    @if not $mults { @return error("no mults-map named '#{$name}-mults'"); }
+    $value: map-get($mults, $mult);
+    @if not $value { @return error("no mult named '#{$mult}' in '#{$name}-mults'"); }
+    @return $value;
+  }
+  @return error("either $mult or $name argument is not a string");
+}
+
+//////////////////////////
+// MEDIA PRIVATE MIXINS //
+//////////////////////////
+
+
+@mixin __mm($keys: map-keys($media), $head: true, $tail: true) {
+  $pair-set: __range-pairs($keys, $head, $tail);
+  @if length($pair-set) == 0 { @content; }
+  @else {
+    @each $pair in $pair-set {
+      @include m($pair...) {
+        @content;
+      }
+    }
+  }
+}

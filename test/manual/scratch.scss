@@ -1,22 +1,41 @@
 @import '../../index';
 
-$catch-throws: true;
+$throw-active: true;
 
 .pre-init {}
 
-$base: ( inner-y-mults: (sm: 0.5) );
-$media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.75), size: 20px ), b: ( breakpoint: 30em, ) );
-@include m-init((output: false, basis: breakpoints));
+$media: (
+  a: (breakpoint: 20em),
+  b: (breakpoint: 40em, size: 2),
+  );
 
-.post-init {
-  out: inner-y();
-  out: inner-y(sm);
-  out: inner-y(sm, a);
-  out: __rem(10px 20px 30px);
-  out: __is-list(10px 20px 30px);
-  out: __is-number(10px 20px 30px);
-  err: last-error();
+@include setup-m('breakpoints');
+
+.test {
+  orig: map-stringify($media-orig);
+  mm: __props-for(size);
+  mm: __media-for(size);
 }
+
+// $base: ( inner-y-mults: (sm: 0.5) );
+// $media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.75), size: 20px ), b: ( breakpoint: 30em, ) );
+
+// @include init-m((output: false, basis: breakpoints));
+
+// .foo {
+//   // line
+//   out: trim-value(1, mono, mx);
+// }
+
+// .post-init {
+//   out: inner-y();
+//   out: inner-y(sm);
+//   out: inner-y(sm, a);
+//   out: __rem(10px 20px 30px);
+//   out: __is-list(10px 20px 30px);
+//   out: __is-number(10px 20px 30px);
+//   err: last-error();
+// }
 
 /* fonts: #{map-stringify($fonts)} */
 /* base: #{map-stringify($base)} */

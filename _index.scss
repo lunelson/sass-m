@@ -1,34 +1,45 @@
-// dependencies
-@import 'node_modules/sass-calc/index';
-@import 'node_modules/sass-maps-plus/index';
+
+
+//  ___  __ _ ___ ___ ______ _ __ ___
+// / __|/ _` / __/ __|______| '_ ` _ \
+// \__ \ (_| \__ \__ \      | | | | | |
+// |___/\__,_|___/___/      |_| |_| |_|
+
+
+/////////////
+// IMPORTS //
+/////////////
+
+@import 'node_modules/sass-u/index';
+@import 'node_modules/sass-to-js/index';
 @import 'node_modules/sass-throw/index';
 
-// utilities
-@import 'stylesheets/util-configs';
-@import 'stylesheets/util-functions';
-@import 'stylesheets/util-mixins';
+@import "scss/__util-fn";
+@import "scss/__util-mx";
+@import "scss/_config";
+@import "scss/_private";
+@import "scss/_public-fn";
+@import "scss/_public-mx";
+@import "scss/_setup";
 
-// base
-@import 'stylesheets/base-configs';
-@import 'stylesheets/base-functions';
-@import 'stylesheets/base-mixins';
+//////////////
+// DEFAULTS //
+//////////////
 
-// outer
-@import 'stylesheets/outer-configs';
-@import 'stylesheets/outer-functions';
-@import 'stylesheets/outer-mixins';
+$base: () !default;
+$media: () !default;
 
-// wrap
-@import 'stylesheets/wrap-configs';
-@import 'stylesheets/wrap-functions';
-@import 'stylesheets/wrap-mixins';
+$base-orig: () !default;
+$media-orig: () !default;
 
-// grid
-@import 'stylesheets/grid-configs';
-@import 'stylesheets/grid-functions';
-@import 'stylesheets/grid-mixins';
+$done-inits: false;
+$done-outputs: false;
 
-// stack
-@import 'stylesheets/stack-configs';
-@import 'stylesheets/stack-functions';
-@import 'stylesheets/stack-mixins';
+$curr-m: null; // key
+
+$curr-size: null; // key | value
+$curr-line: null; // key | value
+$curr-inner-y: null; // key | value
+$curr-inner-x: null; // key | value
+$curr-outer-y: null; // key | value
+$curr-outer-x: null; // key | value

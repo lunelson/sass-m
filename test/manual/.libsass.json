@@ -7,7 +7,10 @@
         "style": "expanded", // String | Output style: nested/expanded/compact/compressed
         "line-numbers": false, // Bool | Emit comments showing original line numbers
         "line-comments": false, // Bool | Alias for line-numbers, does not override
-        "load-path": ["../../node_modules/"], // List | Sass import paths: e.g. [ "C:\bourbon", "C:\compass" ]
+        "load-path": [  // List | Sass import paths: e.g. [ "C:\bourbon", "C:\compass" ]
+            "/Users/lunelson/Git/packages/sass-m/node_modules/",
+            "/Users/lunelson/Git/packages/sass-m/sass/"
+        ],
         "plugin-path": false, // String | Path to autoload plugins (libsass issue 878)
         "sourcemap": false, // Bool | Emit .css.map file for debugging in browser
         "omit-map-comment": false, // Bool | Omit comment about .css.map file in .css file

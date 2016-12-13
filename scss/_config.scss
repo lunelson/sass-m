@@ -1,0 +1,80 @@
+//
+// globals
+// --------------------------------------------------------------------------
+
+
+  $base: () !default;
+  $media: () !default;
+  $fonts: () !default;
+  $base-orig: () !default;
+  $media-orig: () !default;
+  $globals: () !default;
+
+  $init-done: false;
+
+  $curr-m: null; // key
+  $curr-font: null; // key
+  $curr-size: null; // key | value
+  $curr-line: null; // key | value
+  $curr-inner-y: null; // key | value
+  $curr-inner-x: null; // key | value
+  $curr-outer-y: null; // key | value
+  $curr-outer-x: null; // key | value
+  $curr-stack: null; // selector
+
+////////////////////
+// MEDIA DEFAULTS //
+////////////////////
+
+
+$medium-default: (
+  size: 16px,
+  size-mults: (),
+  line: 1.5,
+  line-mults: (),
+  inner-x: 2rem,
+  inner-x-mults: (),
+  inner-y: 2rem,
+  inner-y-mults: (),
+  outer-top: 2rem,
+  outer-bottom: 2rem,
+  outer-y-mults: (),
+  outer-right: 2rem,
+  outer-left: 2rem,
+  outer-x-mults: (),
+  copy-width: 24rem,
+  copy-columns: 4,
+  grid-columns: 4,
+);
+
+
+$media-defaults: (
+  grid-columns: (
+    c4: ( grid-columns: 4 ),
+    c6: ( grid-columns: 6 ),
+    c8: ( grid-columns: 8 ),
+    c10: ( grid-columns: 10 ),
+    c12: ( grid-columns: 12 ),
+  ),
+  breakpoint: (
+    a: (breakpoint: 32em),
+    b: (breakpoint: 48em),
+    c: (breakpoint: 64em),
+    d: (breakpoint: 80em),
+  ),
+);
+
+
+$media-init-defaults: (
+  basis: columns, // columns | breakpoints
+  // init-outer: true,
+  // init-wrap: true,
+  // init-grid: true,
+  // init-stack: true,
+  // init-typo: false,
+  // grid-type: flex, // flex | float
+  // wrap-type: standard, // standard | extended
+  // output: true,
+  globals: (),
+);
+

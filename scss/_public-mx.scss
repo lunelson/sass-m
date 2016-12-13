@@ -1,0 +1,33 @@
+/////////////////////////
+// MEDIA PUBLIC MIXINS //
+/////////////////////////
+
+
+@mixin m($min, $max: null) {
+  $prev-m: $curr-m;
+  $curr-m: $min !global;
+  @media #{__query-string($min, $max)} { @content }
+  $curr-m: $prev-m !global;
+}
+
+
+@mixin mm($lo: map-keys($media), $hi: null) {
+  @if type-of($lo) == 'list' { @include __mm($lo) { @content; } }
+  @else {
+    $media-keys: map-keys($media);
+    $media-length: length($media-keys);
+    $start: if($lo, (index($media-keys, $lo) or 1), 1);
+    $end: if($hi, (index($media-keys, $hi) or $media-length), $media-length);
+    $range: slice($media-keys, $start, $end);
+    $head: ($lo or nth($media-keys, $start)) == __first($media-keys);
+    $tail: ($hi or nth($media-keys, $end)) == __last($media-keys);
+    @include __mm($range, $head, $tail) { @content; }
+  }
+}
+
+
+@mixin mm-for($props...) {
+  @include __mm(__media-for($props...)) {
+    @content;
+  }
+}

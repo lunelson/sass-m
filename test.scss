@@ -19,19 +19,19 @@ $catch-throws: true;
   @include test('[function] font') {
     $desc: 'error if m-init has not been run';
     $foo: font();
-    @include assert-equal(last-error(), "m not initialized; please '@include m-init()'", $desc);
+    @include assert-equal(last-error(), "m not initialized; please '@include init-m()'", $desc);
   }
 
   @include test('[function] m') {
     $desc: 'error if m-init has not been run';
     $foo: m();
-    @include assert-equal(last-error(), "m not initialized; please '@include m-init()'", $desc);
+    @include assert-equal(last-error(), "m not initialized; please '@include init-m()'", $desc);
   }
 
   @include test('[function] m-orig') {
     $desc: 'error if m-init has not been run';
     $foo: m-orig();
-    @include assert-equal(last-error(), "m not initialized; please '@include m-init()'", $desc);
+    @include assert-equal(last-error(), "m not initialized; please '@include init-m()'", $desc);
   }
 }
 
@@ -42,7 +42,7 @@ $catch-throws: true;
 
 $base: ( inner-y-mults: (sm: 0.5) );
 $media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.5), size: 20px ), b: ( breakpoint: 30em, ) );
-@include m-init((output: false, basis: breakpoints));
+@include init-m((output: false, basis: breakpoints));
 
 @import 'test/test--base-functions';
 @import 'test/test--wip';
