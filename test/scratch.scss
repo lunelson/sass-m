@@ -1,4 +1,4 @@
-@import '../../index';
+@import '../index';
 
 $throw-active: true;
 
@@ -9,7 +9,7 @@ $media: (
   b: (breakpoint: 40em, size: 2),
   );
 
-@include setup-m('breakpoints');
+@include m-output('breakpoints');
 
 .test {
   orig: map-stringify($media-orig);
@@ -20,7 +20,7 @@ $media: (
 // $base: ( inner-y-mults: (sm: 0.5) );
 // $media: ( a: ( breakpoint: 20em, inner-y-mults: (sm: 0.75), size: 20px ), b: ( breakpoint: 30em, ) );
 
-// @include init-m((output: false, basis: breakpoints));
+// @include m-init((output: false, basis: breakpoints));
 
 // .foo {
 //   // line

@@ -1,6 +1,6 @@
-/////////////////////////
-// MEDIA PUBLIC MIXINS //
-/////////////////////////
+//
+// M -- single query
+//
 
 
 @mixin m($min, $max: null) {
@@ -9,6 +9,11 @@
   @media #{__query-string($min, $max)} { @content }
   $curr-m: $prev-m !global;
 }
+
+
+//
+// MM -- multi query
+//
 
 
 @mixin mm($lo: map-keys($media), $hi: null) {
@@ -24,6 +29,11 @@
     @include __mm($range, $head, $tail) { @content; }
   }
 }
+
+
+//
+// MM-FOR -- queries per prop
+//
 
 
 @mixin mm-for($props...) {

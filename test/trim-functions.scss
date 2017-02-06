@@ -1,4 +1,4 @@
-@import '../../index';
+@import '../index';
 
 // type, line, font
 @function trim-value-alt($xtra: 1, $line: $curr-line, $font: $curr-font){
@@ -33,7 +33,7 @@
   @return subtract(inner-y($mult), trim-value('mx', $line, $font));
 }
 
-@include init-m((output: false, basis: breakpoints));
+@include m-init((output: false, basis: breakpoints));
 
 .foo {
   // line

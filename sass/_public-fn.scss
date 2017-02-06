@@ -1,23 +1,25 @@
-
-////////////////////////////
-// MEDIA PUBLIC FUNCTIONS //
-////////////////////////////
+//   __                  _   _
+//  / _|                | | (_)
+// | |_ _   _ _ __   ___| |_ _  ___  _ __  ___
+// |  _| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+// | | | |_| | | | | (__| |_| | (_) | | | \__ \
+// |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
 
 
 //
 // value getters, base ✅
-// --------------------------------------------------------------------------
+//
 
 
 @function medium($m: $curr-m) {
-  @if not $done-inits { @return error("m not initialized; please '@include init-m()'"); }
+  @if not $done-init { @return error("m not initialized; please '@include m-init()'"); }
   @if $m { @return map-get($media, $m) or error("medium '#{$m}' not found in $media");}
   @return $base;
 }
 
 
 @function medium-orig($m: $curr-m) {
-  @if not $done-inits { @return error("m not initialized; please '@include init-m()'"); }
+  @if not $done-init { @return error("m not initialized; please '@include m-init()'"); }
   @if $m { @return map-get($media-orig, $m) or error("original medium '#{$m}' not found in $media"); }
   @return $base-orig;
 }

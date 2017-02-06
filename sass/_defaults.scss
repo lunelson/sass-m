@@ -1,0 +1,53 @@
+//                   __ _
+//                  / _(_)
+//   ___ ___  _ __ | |_ _  __ _
+//  / __/ _ \| '_ \|  _| |/ _` |
+// | (_| (_) | | | | | | | (_| |
+//  \___\___/|_| |_|_| |_|\__, |
+//                         __/ |
+//                        |___/
+
+
+//
+// BASE
+//
+
+$base-default: (
+  size: 16px,
+  size-mults: (),
+  line: 1.5,
+  line-mults: (),
+  inner-x: 2rem,
+  inner-x-mults: (),
+  inner-y: 2rem,
+  inner-y-mults: (),
+  outer-top: 2rem,
+  outer-bottom: 2rem,
+  outer-y-mults: (),
+  outer-right: 2rem,
+  outer-left: 2rem,
+  outer-x-mults: (),
+  copy-width: 24rem,
+  copy-columns: 4,
+  grid-columns: 4,
+);
+
+//
+// MEDIA, by BASIS
+//
+
+$media-basis-defaults: (
+  grid-columns: (
+    c4: ( grid-columns: 4 ),
+    c6: ( grid-columns: 6 ),
+    c8: ( grid-columns: 8 ),
+    c10: ( grid-columns: 10 ),
+    c12: ( grid-columns: 12 ),
+  ),
+  breakpoint: (
+    a: (breakpoint: 32em),
+    b: (breakpoint: 48em),
+    c: (breakpoint: 64em),
+    d: (breakpoint: 80em),
+  ),
+);

@@ -5,41 +5,36 @@
 // \__ \ (_| \__ \__ \      | | | | | |
 // |___/\__,_|___/___/      |_| |_| |_|
 
-
-/////////////
-// IMPORTS //
-/////////////
+// IMPORTS
 
 @import 'node_modules/sass-u/index';
 @import 'node_modules/sass-to-js/index';
 @import 'node_modules/sass-throw/index';
 
-@import "scss/__util-fn";
-@import "scss/__util-mx";
-@import "scss/_config";
-@import "scss/_private";
-@import "scss/_public-fn";
-@import "scss/_public-mx";
-@import "scss/_setup";
+// @import "sass/__util-fn";
+// @import "sass/__util-mx";
+@import "sass/defaults";
+@import "sass/private";
+@import "sass/public-fn";
+@import "sass/public-mx";
+@import "sass/setup";
 
-//////////////
-// DEFAULTS //
-//////////////
+// GLOBALS
 
+$base-orig: ();
 $base: () !default;
+
+$media-orig: ();
 $media: () !default;
 
-$base-orig: () !default;
-$media-orig: () !default;
-
-$done-inits: false;
-$done-outputs: false;
-
 $curr-m: null; // key
-
 $curr-size: null; // key | value
 $curr-line: null; // key | value
-$curr-inner-y: null; // key | value
+
 $curr-inner-x: null; // key | value
-$curr-outer-y: null; // key | value
+$curr-inner-y: null; // key | value
 $curr-outer-x: null; // key | value
+$curr-outer-y: null; // key | value
+
+$done-init: false;
+$done-output: false;

@@ -1,0 +1,127 @@
+body::before {
+  content: '{"media": {"alpha": {"size": "17px", "size-mults": [], "line": 3.125, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 2, "map": {"a": 1, "b": 2}, "list": [1, 2, 3], "scale": 1.0625, "test": "2.35294rem", "breakpoint": "20em", "content-width": "14.82353rem"}, "beta": {"size": "19px", "size-mults": [], "line": 3.125, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 3, "map": {"a": 2, "b": 4, "c": 6}, "list": [1, 2, 3, 4], "scale": 1.1875, "test": "2.35294rem", "breakpoint": "30em", "content-width": "21.26316rem"}, "gamma": {"size": "21px", "size-mults": [], "line": 3.125, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 5, "map": {"a": 2, "b": 4, "c": 6}, "list": [1, 2, 3, 4], "scale": 1.3125, "test": "2.35294rem", "breakpoint": "40em", "content-width": "26.47619rem"}}, "base": {"size": "16px", "size-mults": [], "line": 1.5, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 2, "map": {"a": 1, "b": 2}, "list": [1, 2, 3], "scale": 1}}';
+  display: block;
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+head {
+  font-family: '{"media": {"alpha": {"size": "17px", "size-mults": [], "line": 3.125, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 2, "map": {"a": 1, "b": 2}, "list": [1, 2, 3], "scale": 1.0625, "test": "2.35294rem", "breakpoint": "20em", "content-width": "14.82353rem"}, "beta": {"size": "19px", "size-mults": [], "line": 3.125, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 3, "map": {"a": 2, "b": 4, "c": 6}, "list": [1, 2, 3, 4], "scale": 1.1875, "test": "2.35294rem", "breakpoint": "30em", "content-width": "21.26316rem"}, "gamma": {"size": "21px", "size-mults": [], "line": 3.125, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 5, "map": {"a": 2, "b": 4, "c": 6}, "list": [1, 2, 3, 4], "scale": 1.3125, "test": "2.35294rem", "breakpoint": "40em", "content-width": "26.47619rem"}}, "base": {"size": "16px", "size-mults": [], "line": 1.5, "line-mults": [], "inner-x": "2rem", "inner-x-mults": [], "inner-y": "2rem", "inner-y-mults": [], "outer-top": "2rem", "outer-bottom": "2rem", "outer-y-mults": [], "outer-right": "2rem", "outer-left": "2rem", "outer-x-mults": [], "copy-width": "24rem", "copy-columns": 4, "grid-columns": 4, "number": 2, "map": {"a": 1, "b": 2}, "list": [1, 2, 3], "scale": 1}}';
+}
+
+@media screen and (max-width: 19.999em) {
+  html {
+    font-size: 1em;
+  }
+}
+
+@media screen and (min-width: 20em) and (max-width: 29.999em) {
+  html {
+    font-size: 1.0625em;
+  }
+}
+
+@media screen and (min-width: 30em) and (max-width: 39.999em) {
+  html {
+    font-size: 1.1875em;
+  }
+}
+
+@media screen and (min-width: 40em) {
+  html {
+    font-size: 1.3125em;
+  }
+}
+
+/* $media: (
+  alpha: (
+    size: 17px,
+    size-mults: ,
+    line: 3.125,
+    line-mults: ,
+    inner-x: 2rem,
+    inner-x-mults: ,
+    inner-y: 2rem,
+    inner-y-mults: ,
+    outer-top: 2rem,
+    outer-bottom: 2rem,
+    outer-y-mults: ,
+    outer-right: 2rem,
+    outer-left: 2rem,
+    outer-x-mults: ,
+    copy-width: 24rem,
+    copy-columns: 4,
+    grid-columns: 4,
+    number: 2,
+    map: (
+      a: 1,
+      b: 2
+    ),
+    list: 1 2 3,
+    scale: 1.0625,
+    test: 2.35294rem,
+    breakpoint: 20em,
+    content-width: 14.82353rem
+  ),
+  beta: (
+    size: 19px,
+    size-mults: ,
+    line: 3.125,
+    line-mults: ,
+    inner-x: 2rem,
+    inner-x-mults: ,
+    inner-y: 2rem,
+    inner-y-mults: ,
+    outer-top: 2rem,
+    outer-bottom: 2rem,
+    outer-y-mults: ,
+    outer-right: 2rem,
+    outer-left: 2rem,
+    outer-x-mults: ,
+    copy-width: 24rem,
+    copy-columns: 4,
+    grid-columns: 4,
+    number: 3,
+    map: (
+      a: 2,
+      b: 4,
+      c: 6
+    ),
+    list: 1 2 3 4,
+    scale: 1.1875,
+    test: 2.35294rem,
+    breakpoint: 30em,
+    content-width: 21.26316rem
+  ),
+  gamma: (
+    size: 21px,
+    size-mults: ,
+    line: 3.125,
+    line-mults: ,
+    inner-x: 2rem,
+    inner-x-mults: ,
+    inner-y: 2rem,
+    inner-y-mults: ,
+    outer-top: 2rem,
+    outer-bottom: 2rem,
+    outer-y-mults: ,
+    outer-right: 2rem,
+    outer-left: 2rem,
+    outer-x-mults: ,
+    copy-width: 24rem,
+    copy-columns: 4,
+    grid-columns: 4,
+    number: 5,
+    map: (
+      a: 2,
+      b: 4,
+      c: 6
+    ),
+    list: 1 2 3 4,
+    scale: 1.3125,
+    test: 2.35294rem,
+    breakpoint: 40em,
+    content-width: 26.47619rem
+  )
+) */

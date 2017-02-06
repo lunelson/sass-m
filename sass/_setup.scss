@@ -1,0 +1,102 @@
+//
+// INIT
+//
+
+
+@mixin m-init($basis: 'breakpoint') {
+
+  // init base
+  $base-orig: $base !global;
+  $base: __normalize-medium(data-merge($base-default, $base), 16px) !global;
+  @if length($media) == 0 { $media: map-get($media-basis-defaults, $basis) !global; }
+  // init media
+  $media-orig: $media !global;
+  $reference: $base;
+  @each $m, $medium in $media {
+    @if not index(map-keys($medium), $basis) { @include error('sass-m / m-init: one of your $media does not have a #{$basis} key'); }
+    $reference: __normalize-medium(data-merge($reference, $medium));
+    $reference: call('__populate-medium-by-#{$basis}', $reference);
+    $media: map-merge($media, ($m: $reference)) !global;
+  }
+  $done-init: true !global;
+}
+
+
+//
+// SETUP
+//
+
+
+@mixin m-output($basis: 'breakpoint') {
+
+  // run init, if it's not done
+  @if not $done-init { @include m-init($basis); }
+  // output media and base as JSON
+  @include set-css-data((media: $media, base: $base));
+  // output html ground-rules
+  @include mm-for('size') { html { font-size: medium-value('scale') * 1em; } }
+  $done-output: true !global;
+}
+
+
+//
+// DEBUG
+//
+
+
+@mixin m-debug($visible: false, $color: rgba(0,200,200,0.08)) {
+
+  // grid-columns
+  @if $visible {
+    body::after {
+      content: '';
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      position: fixed;
+      height: 100%;
+      pointer-events: none;
+      user-select: none;
+      z-index: 999;
+      display: block;
+
+      $column-count: medium-value('column-count') or 8;
+      $margin-x: medium-value('margin-x');
+      $page-right: medium-value('page-right');
+      $page-left: medium-value('page-left');
+      $page-sum: $page-right + $page-left;
+      $page-diff: $page-right - $page-left;
+
+      width: calc(100% - #{$page-sum} + #{$margin-x});
+      margin-left: calc((100% - #{$page-sum - $page-diff} + #{$margin-x} * 2) / -2);
+      background: linear-gradient(to right,
+        rgba(0,0,0,0) $margin-x,
+        $color $margin-x,
+        $color calc((100% - #{$page-sum} + #{$margin-x}) / #{$column-count} - #{$margin-x})
+      );
+      background-size: calc((100% - #{$page-sum} + #{$margin-x} * 3) / #{$column-count});
+    }
+
+    @each $alias in map-keys($media) {
+      @include media($alias) {
+        $column-count: medium-value('column-count') or 8;
+        $margin-x: medium-value('margin-x');
+        $page-right: medium-value('page-right');
+        $page-left: medium-value('page-left');
+        $page-diff: $page-right - $page-left;
+        $content-width: medium-value('content-width') + $margin-x;
+
+        body:after {
+          width: $content-width;
+          margin-left: ($content-width + $page-diff + $margin-x)/-2;
+          background: linear-gradient(to right,
+            rgba(0,0,0,0) $margin-x,
+            $color $margin-x,
+            $color $content-width / $column-count - $margin-x
+          );
+          background-size: $content-width / $column-count;
+        }
+      }
+    }
+  }
+}

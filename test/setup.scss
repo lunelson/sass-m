@@ -1,0 +1,34 @@
+// @import 'sass-u/index';
+@import '../index';
+
+$media: (
+  alpha: (
+    line: 50px,
+    test: 40px,
+    breakpoint: 20em,
+    size: 17px,
+  ),
+  beta: (
+    breakpoint: 30em,
+    size: 19px,
+    number: 3,
+    map: (a: 2, b: 4, c: 6),
+    list: 2 3 4,
+  ),
+  gamma: (
+    breakpoint: 40em,
+    size: 21px,
+    number: 5,
+  ),
+);
+
+$base: (
+  size: 16px,
+  number: 2,
+  map: (a: 1, b: 2),
+  list: 1 2 3,
+);
+
+@include m-output();
+
+/* $media: #{map-stringify($media)} */
