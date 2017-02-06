@@ -34,7 +34,7 @@
   // output media and base as JSON
   @include set-css-data((media: $media, base: $base));
   // output html ground-rules
-  @include mm-for('size') { html { font-size: medium-value('scale') * 1em; } }
+  @include mm-for('size') { html { font-size: medium-var('scale') * 1em; } }
   $done-output: true !global;
 }
 
@@ -60,10 +60,10 @@
       z-index: 999;
       display: block;
 
-      $column-count: medium-value('column-count') or 8;
-      $margin-x: medium-value('margin-x');
-      $page-right: medium-value('page-right');
-      $page-left: medium-value('page-left');
+      $column-count: medium-var('column-count') or 8;
+      $margin-x: medium-var('margin-x');
+      $page-right: medium-var('page-right');
+      $page-left: medium-var('page-left');
       $page-sum: $page-right + $page-left;
       $page-diff: $page-right - $page-left;
 
@@ -79,12 +79,12 @@
 
     @each $alias in map-keys($media) {
       @include media($alias) {
-        $column-count: medium-value('column-count') or 8;
-        $margin-x: medium-value('margin-x');
-        $page-right: medium-value('page-right');
-        $page-left: medium-value('page-left');
+        $column-count: medium-var('column-count') or 8;
+        $margin-x: medium-var('margin-x');
+        $page-right: medium-var('page-right');
+        $page-left: medium-var('page-left');
         $page-diff: $page-right - $page-left;
-        $content-width: medium-value('content-width') + $margin-x;
+        $content-width: medium-var('content-width') + $margin-x;
 
         body:after {
           width: $content-width;

@@ -1,15 +1,5 @@
-//             _            _
-//            (_)          | |
-//  _ __  _ __ ___   ____ _| |_ ___
-// | '_ \| '__| \ \ / / _` | __/ _ \
-// | |_) | |  | |\ V / (_| | ||  __/
-// | .__/|_|  |_| \_/ \__,_|\__\___|
-// | |
-// |_|
-
-
 //
-// INIT HELPERS
+// init helpers
 //
 
 
@@ -65,7 +55,7 @@
 
 
 //
-// QUERY HELPERS
+// query helpers
 //
 
 @function __props-for($group-key){
@@ -74,8 +64,12 @@
     line: (line-mults),
     inner-x: (inner-x-mults),
     inner-y: (inner-y-mults),
-    outer: (outer-right outer-left outer-x-mults),
+    outer-x: (outer-right outer-left outer-x-mults),
     outer-y: (outer-top outer-bottom outer-y-mults),
+    outer-top: (outer-y-mults),
+    outer-right: (outer-x-mults),
+    outer-bottom: (outer-y-mults),
+    outer-left: (outer-x-mults),
     stack: (inner-y inner-y-mults),
     grid: (inner-x inner-x-mults grid-columns),
     typo: (line line-mults inner-y),
@@ -121,14 +115,14 @@
 
 
 //
-// VALUE HELPERS
+// value helpers
 //
 
 
 @function __rem($values, $m: $curr-m) {
   @if not $values or length($values) == 0 { @return null; }
   @if not (is-number($values) or is-list($values)) { @return error("$values argument must be number or list of numbers"); }
-  $result: (); $size: medium-value('size', $m) or 16px;
+  $result: (); $size: medium-var('size', $m) or 16px;
   @each $value in $values {
     @if not is-number($value) { @return error("a $value in $values was a non-number"); }
     @if unit($value) == 'px' { $result: append($result, $value / $size * 1rem, 'space'); }
@@ -141,7 +135,7 @@
 @function __px($values, $m: $curr-m) {
   @if not $values or length($values) == 0 { @return null; }
   @if not (is-number($values) or is-list($values)) { @return error("$values argument must be number or list of numbers"); }
-  $result: (); $size: medium-value('size', $m) or 16px;
+  $result: (); $size: medium-var('size', $m) or 16px;
   @each $value in $values {
     @if not is-number($value) { @return error("a $value in $values was a non-number"); }
     @if unit($value) == 'px' { $result: append($result, $value, 'space'); }
@@ -156,7 +150,7 @@
   @else if is-unitless($mult) { @return $mult; }
   @else if is-number($mult) { @return __rem($mult, $m); }
   @else if is-string($mult) and is-string($name) {
-    $mults: medium-value('#{$name}-mults', $m);
+    $mults: medium-var('#{$name}-mults', $m);
     @if not $mults { @return error("no mults-map named '#{$name}-mults'"); }
     $value: map-get($mults, $mult);
     @if not $value { @return error("no mult named '#{$mult}' in '#{$name}-mults'"); }
@@ -167,7 +161,7 @@
 
 
 //
-// MIXIN HELPER
+// mixin helper
 //
 
 
@@ -182,6 +176,12 @@
     }
   }
 }
+
+
+//
+// utilities
+//
+
 
 @function __nth($list, $n) {
   // TODO allow it to handle strings; create str-nth
