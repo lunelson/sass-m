@@ -1,18 +1,32 @@
-//                   __ _
-//                  / _(_)
-//   ___ ___  _ __ | |_ _  __ _
-//  / __/ _ \| '_ \|  _| |/ _` |
-// | (_| (_) | | | | | | | (_| |
-//  \___\___/|_| |_|_| |_|\__, |
-//                         __/ |
-//                        |___/
+//
+// globals
+//
+
+
+$base-orig: ();
+$base: () !default;
+
+$media-orig: ();
+$media: () !default;
+
+$curr-m: null; // key
+
+$curr-size: 1; // key | value
+$curr-line: 1; // key | value
+$curr-inner-x: 1; // key | value
+$curr-inner-y: 1; // key | value
+$curr-outer-x: 1; // key | value
+$curr-outer-y: 1; // key | value
+
+$done-m-init: false;
+$done-m-setup: false;
 
 
 //
-// BASE
+// default for base
 //
 
-$base-default: (
+$medium-default: (
   size: 16px,
   size-mults: (),
   line: 1.5,
@@ -33,10 +47,10 @@ $base-default: (
 );
 
 //
-// MEDIA, by BASIS
+// defaults for media, per basis
 //
 
-$media-basis-defaults: (
+$media-defaults: (
   grid-columns: (
     c4: ( grid-columns: 4 ),
     c6: ( grid-columns: 6 ),

@@ -1,5 +1,5 @@
 //
-// INIT
+// init
 //
 
 
@@ -7,8 +7,8 @@
 
   // init base
   $base-orig: $base !global;
-  $base: __normalize-medium(data-merge($base-default, $base), 16px) !global;
-  @if length($media) == 0 { $media: map-get($media-basis-defaults, $basis) !global; }
+  $base: __normalize-medium(data-merge($medium-default, $base), 16px) !global;
+  @if length($media) == 0 { $media: map-get($media-defaults, $basis) !global; }
   // init media
   $media-orig: $media !global;
   $reference: $base;
@@ -18,29 +18,29 @@
     $reference: call('__populate-medium-by-#{$basis}', $reference);
     $media: map-merge($media, ($m: $reference)) !global;
   }
-  $done-init: true !global;
+  $done-m-init: true !global;
 }
 
 
 //
-// SETUP
+// setup
 //
 
 
-@mixin m-output($basis: 'breakpoint') {
+@mixin m-setup($basis: 'breakpoint') {
 
   // run init, if it's not done
-  @if not $done-init { @include m-init($basis); }
-  // output media and base as JSON
+  @if not $done-m-init { @include m-init($basis); }
+  // output media and base as json
   @include set-css-data((media: $media, base: $base));
   // output html ground-rules
   @include mm-for('size') { html { font-size: medium-var('scale') * 1em; } }
-  $done-output: true !global;
+  $done-m-setup: true !global;
 }
 
 
 //
-// DEBUG
+// debug
 //
 
 

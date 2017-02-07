@@ -145,18 +145,17 @@
 }
 
 
-@function __mult($mult, $name, $m: $curr-m) {
-  @if not $mult { @return 1; }
-  @else if is-unitless($mult) { @return $mult; }
+@function __mult($mult, $prop-name, $m: $curr-m) {
+  @if is-unitless($mult) { @return $mult; }
   @else if is-number($mult) { @return __rem($mult, $m); }
-  @else if is-string($mult) and is-string($name) {
-    $mults: medium-var('#{$name}-mults', $m);
-    @if not $mults { @return error("no mults-map named '#{$name}-mults'"); }
+  @else if is-string($mult) and is-string($prop-name) {
+    $mults: medium-var('#{$prop-name}-mults', $m);
+    @if not $mults { @return error("no mults-map named '#{$prop-name}-mults'"); }
     $value: map-get($mults, $mult);
-    @if not $value { @return error("no mult named '#{$mult}' in '#{$name}-mults'"); }
+    @if not $value { @return error("no mult named '#{$mult}' in '#{$prop-name}-mults'"); }
     @return $value;
   }
-  @return error("either $mult or $name argument is not a string");
+  @return error("either $mult or $prop-name argument is not a string");
 }
 
 

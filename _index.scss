@@ -16,23 +16,3 @@
 @import "sass/public-fn";
 @import "sass/public-mx";
 @import "sass/setup";
-
-// GLOBALS
-
-$base-orig: ();
-$base: () !default;
-
-$media-orig: ();
-$media: () !default;
-
-$curr-m: null; // key
-$curr-size: null; // key | value
-$curr-line: null; // key | value
-
-$curr-inner-x: null; // key | value
-$curr-inner-y: null; // key | value
-$curr-outer-x: null; // key | value
-$curr-outer-y: null; // key | value
-
-$done-init: false;
-$done-output: false;
