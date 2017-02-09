@@ -22,24 +22,31 @@
 //
 
 
-@function medium-var($value-key, $m: $curr-m) {
-  $medium: medium($m);
-  @if $medium {
-    $medium-desc: if($m, "$medium '#{$m}'", "$base");
-    @return map-get($medium, $value-key) or error("key '#{$value-key}' not found in #{$medium-desc}");
-  }
-  @return $medium; // will be null if $throw-catch is true; otherwise will have @error'd out
+@function medium-has($key, $m: $curr-m) {
+  @return map-has-key(medium($m), $key);
+}
+
+@function medium-var($key, $m: $curr-m) {
+  @return map-get(medium($m), $key);
+}
+
+@function medium-orig-has($key, $m: $curr-m) {
+  @return map-has-key(medium-orig($m), $key);
+}
+
+@function medium-orig-var($key, $m: $curr-m) {
+  @return map-get(medium-orig($m), $key);
 }
 
 
-@function medium-orig-var($value-key, $m: $curr-m) {
-  $medium-orig: medium-orig($m);
-  @if $medium-orig {
-    $medium-desc: if($m, "$medium-orig '#{$m}'", "$base-orig");
-    @return map-get($medium-orig, $value-key) or error("key '#{$value-key}' not found in #{$medium-desc}");
-  }
-  @return $medium-orig; // will be null if $throw-catch is true; otherwise will have @error'd out
-}
+// @function medium-orig-var($key, $m: $curr-m) {
+//   $medium-orig: medium-orig($m);
+//   @if $medium-orig {
+//     $medium-desc: if($m, "$medium-orig '#{$m}'", "$base-orig");
+//     @return map-get($medium-orig, $key) or error("key '#{$key}' not found in #{$medium-desc}");
+//   }
+//   @return $medium-orig; // will be null if $throw-catch is true; otherwise will have @error'd out
+// }
 
 //
 // aliases of above

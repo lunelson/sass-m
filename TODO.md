@@ -1,3 +1,15 @@
+## renaming
+
+m-inner-x($mult)
+m-inner-y($mult)
+m-outer-top
+m-outer-right
+m-outer-bottom
+m-outer-left
+m-size
+m-line
+m-auto-line
+
 ## testing
 
 add a couple of test on value-getter-base functions

@@ -29,6 +29,6 @@ $base: (
   list: 1 2 3,
 );
 
-@include m-output();
+@include m-setup();
 
 /* $media: #{map-stringify($media)} */

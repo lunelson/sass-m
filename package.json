@@ -1,8 +1,12 @@
 {
   "name": "sass-m",
   "version": "0.9.0",
-  "description": "Sass breakpoint scopes and mixins, with layout tools",
+  "description": "my sass media/scope mgmt system",
   "main": "_index.scss",
+  "directories": {
+    "test": "test"
+  },
+  "private": true,
   "scripts": {
     "test": "gulp test"
   },
@@ -12,20 +16,19 @@
     "type": "git",
     "url": "git+https://github.com/lunelson/sass-m.git"
   },
+  "bugs": {
+    "url": "https://github.com/lunelson/sass-m/issues"
+  },
+  "homepage": "https://github.com/lunelson/sass-m#readme",
   "keywords": [
     "libsass",
     "sass",
     "media",
     "media-query",
-    "grid",
     "scope",
     "variables",
-    "css"
+    "custom-properties"
   ],
-  "bugs": {
-    "url": "https://github.com/lunelson/sass-m/issues"
-  },
-  "homepage": "https://github.com/lunelson/sass-m#readme",
   "dependencies": {
     "sass-calc": "github:lunelson/sass-calc",
     "sass-maps-plus": "github:lunelson/sass-maps-plus",
