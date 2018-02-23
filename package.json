@@ -1,6 +1,6 @@
 {
   "name": "@lunelson/sass-m",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "A Sass Media-query and Media-scoped variable system",
   "keywords": [
     "custom-properties",
