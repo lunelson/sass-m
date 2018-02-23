@@ -4,14 +4,14 @@
 
 
 @function medium($m: $curr-m) {
-  @if not $done-m-init { @return error("m not initialized; please '@include m-init()'"); }
+  @if not $done-m { @return error("m not initialized; please '@include m-init()'"); }
   @if $m { @return map-get($media, $m) or error("medium '#{$m}' not found in $media");}
   @return $base;
 }
 
 
 @function medium-orig($m: $curr-m) {
-  @if not $done-m-init { @return error("m not initialized; please '@include m-init()'"); }
+  @if not $done-m { @return error("m not initialized; please '@include m-init()'"); }
   @if $m { @return map-get($media-orig, $m) or error("original medium '#{$m}' not found in $media"); }
   @return $base-orig;
 }
@@ -39,15 +39,6 @@
 }
 
 
-// @function medium-orig-var($key, $m: $curr-m) {
-//   $medium-orig: medium-orig($m);
-//   @if $medium-orig {
-//     $medium-desc: if($m, "$medium-orig '#{$m}'", "$base-orig");
-//     @return map-get($medium-orig, $key) or error("key '#{$key}' not found in #{$medium-desc}");
-//   }
-//   @return $medium-orig; // will be null if $throw-catch is true; otherwise will have @error'd out
-// }
-
 //
 // aliases of above
 //
@@ -63,20 +54,6 @@
 //
 // value getters, simple ✅
 //
-
-@function size($mult: $curr-size, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'size', $m);
-  @return if(is-unitless($mult), $mult * 1rem, $mult);
-}
-
-
-@function line($mult: $curr-line, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'line', $m);
-  @return if(is-unitless($mult), $mult * medium-var('line', $m), $mult);
-}
-
 
 @function inner-x($mult: $curr-inner-x, $m: $curr-m) {
   @if not $mult { @return null; }

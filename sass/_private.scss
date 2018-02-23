@@ -3,24 +3,23 @@
 //
 
 
-@function __normalize-medium($medium, $reference-size: null) {
+@function __normalize-medium($medium, $ref-font-size: null) {
+
   // get reference font size
-  $reference-size: $reference-size or map-get($base, 'size');
+  $ref-font-size: $ref-font-size or map-get($base, 'font-size');
 
   // normalize size to px
-  $medium-size: map-get($medium, 'size');
-  @if unit($medium-size) != 'px' { $medium-size: strip($medium-size) * $reference-size; }
-
-  // normalize line to unitless
-  $medium-line: map-get($medium, 'line');
-  @if index('rem' 'em', unit($medium-line)) { $medium-line: strip($medium-line); }
-  @if index('px', unit($medium-line)) { $medium-line: strip($medium-line) / strip($reference-size); }
+  $medium-size: map-get($medium, 'font-size');
+  @if unit($medium-size) != 'px' { $medium-size: strip($medium-size) * $ref-font-size; }
 
   // collect these along with unitless scale
-  $normalized: ( 'size': $medium-size, 'line': $medium-line,'scale': strip($medium-size / 16px) );
+  $normalized: (
+    'font-size': $medium-size,
+    'html-scale': strip($medium-size / 16px)
+  );
 
   // normalize all other number values to rem
-  @each $key, $value in map-remove($medium, 'size', 'line') {
+  @each $key, $value in map-remove($medium, 'font-size') {
     @if if(is-number($value), unit($value) == 'px', false) {
       $normalized: map-merge($normalized, ($key: $value / $medium-size * 1rem));
     }
@@ -33,24 +32,24 @@
 
 @function __populate-medium-by-breakpoint($medium) {
   $breakpoint: map-get($medium, 'breakpoint');
-  $outer-width: assert($breakpoint / map-get($medium, 'scale'), rem);
+  $outer-width: assert($breakpoint / map-get($medium, 'html-scale'), rem);
   $outer-x: map-get($medium, 'outer-right') + map-get($medium, 'outer-left');
-  @return map-merge($medium, ('content-width': $outer-width - $outer-x));
+  @return map-merge($medium, ( 'outer-width': $outer-width, 'inner-width': $outer-width - $outer-x ));
 }
 
 
 @function __populate-medium-by-grid-columns($medium) {
-  $size: map-get($medium, 'size');
+  $size: map-get($medium, 'font-size');
   $inner-x: map-get($medium, 'inner-x');
   $outer-x: map-get($medium, 'outer-right') + map-get($medium, 'outer-left');
   $copy-width: map-get($medium, 'copy-width');
   $copy-columns: map-get($medium, 'copy-columns');
   $grid-columns: map-get($medium, 'grid-columns');
   $copy-vs-grid: $copy-columns/$grid-columns;
-  $content-width: ($copy-width + $inner-x) / $copy-vs-grid - $inner-x;
-  $outer-width: $content-width + $outer-x;
-  $breakpoint: assert($outer-width * map-get($medium, 'scale'), em);
-  @return map-merge($medium, ( 'content-width': $content-width, 'breakpoint': $breakpoint ));
+  $inner-width: ($copy-width + $inner-x) / $copy-vs-grid - $inner-x;
+  $outer-width: $inner-width + $outer-x;
+  $breakpoint: assert($outer-width * map-get($medium, 'html-scale'), em);
+  @return map-merge($medium, ( 'outer-width': $outer-width, 'inner-width': $inner-width, 'breakpoint': $breakpoint ));
 }
 
 
@@ -60,8 +59,8 @@
 
 @function __props-for($group-key){
   $groups: (
-    size: (size-mults),
-    line: (line-mults),
+    // size: (size-mults),
+    // line: (line-mults),
     inner-x: (inner-x-mults),
     inner-y: (inner-y-mults),
     outer-x: (outer-right outer-left outer-x-mults),
@@ -72,7 +71,7 @@
     outer-left: (outer-x-mults),
     stack: (inner-y inner-y-mults),
     grid: (inner-x inner-x-mults grid-columns),
-    typo: (line line-mults inner-y),
+    typo: (sizes inner-y), // this is optional
   );
   $group-keys: map-keys($groups);
   @if index($group-keys, $group-key) {
@@ -122,7 +121,7 @@
 @function __rem($values, $m: $curr-m) {
   @if not $values or length($values) == 0 { @return null; }
   @if not (is-number($values) or is-list($values)) { @return error("$values argument must be number or list of numbers"); }
-  $result: (); $size: medium-var('size', $m) or 16px;
+  $result: (); $size: medium-var('font-size', $m) or 16px;
   @each $value in $values {
     @if not is-number($value) { @return error("a $value in $values was a non-number"); }
     @if unit($value) == 'px' { $result: append($result, $value / $size * 1rem, 'space'); }
@@ -135,7 +134,7 @@
 @function __px($values, $m: $curr-m) {
   @if not $values or length($values) == 0 { @return null; }
   @if not (is-number($values) or is-list($values)) { @return error("$values argument must be number or list of numbers"); }
-  $result: (); $size: medium-var('size', $m) or 16px;
+  $result: (); $size: medium-var('font-size', $m) or 16px;
   @each $value in $values {
     @if not is-number($value) { @return error("a $value in $values was a non-number"); }
     @if unit($value) == 'px' { $result: append($result, $value, 'space'); }
@@ -201,7 +200,6 @@
   @return false;
 }
 
-// TODO: make sure slice supports same logic/signature as native str-slice function
 @function __slice($list, $start: 1, $end: length($list), $sep: list-separator($list)) {
   $output: ();
   @if $start >= 1 and $end >= $start {
@@ -242,4 +240,97 @@
   }
   @return $map;
 }
+
+@function __deep-merge($target, $source) {
+  $source: $source or ();
+  $target: $target or ();
+  $result: ();
+
+  // if both source and target are map-compatible
+  @if is-map($source) and is-map($target) {
+    $result: $target;
+    @each $key, $s-value in $source {
+      $t-value: map-get($target, $key);
+      @if index('list' 'map', type-of($s-value)) or index('list' 'map', type-of($t-value)) {
+        $result: map-merge($result, ($key: __deep-merge($t-value, $s-value)));
+      } @else {
+        $result: map-merge($result, ($key: $s-value));
+      }
+    }
+  }
+
+  // else source overwrites target
+  @else { $result: $source; }
+
+  @return $result;
+}
+
+
+//
+// new API additions
+//
+
+
+//
+// mm2 -- new API
+//
+
+@function __mm-filter-orig($media-keys, $props...) {
+  @if length($props) < 1 { @return (); }
+  $result: ();
+  @each $m in $media-keys {
+    $test: false;
+    @each $prop in $props { $test: if(get(medium-orig($m), $prop...), true, $test); }
+    $result: if($test, append($result, $m), $result);
+  }
+  @return if(length($result) > 0, $result, ());
+}
+
+@function __mm-pairs($list:()) {
+  @if length($list) == 0 { @return $list; }
+  $result: ();
+  @for $n from 1 through length($list) - 1 {
+    $result: append($result, (nth($list, $n) nth($list, $n + 1)), 'comma');
+  }
+  @return $result;
+}
+
+@function __mm-slice($lo: null, $hi: null) {
+  $keys: join(join(null, map-keys($media)), null);
+  $index1: if($lo, index($keys, $lo), 1);
+  $index2: if($hi, index($keys, $hi), length($keys));
+  @return if($index1 and $index2, __slice($keys, $index1, $index2), ());
+}
+
+// @function __mm-filter($props...) {
+//   @if length($props) < 1 { @return (); }
+//   $result: ();
+//   @each $m, $medium-orig in $media-orig {
+//     $test: false;
+//     @each $prop in $props { $test: if(get($medium-orig, $prop...), true, $test); }
+//     $result: if($test, append($result, $m), $result);
+//   }
+//   @return if(length($result) > 0, join(join(null, $result), null), ());
+// }
+
+@function __mm-where($props...) {
+  $result: __mm-filter-orig(map-keys($media), $props...);
+  @return if(length($result) > 0, join(join(null, $result), null), ());
+}
+
+@function mm($lo: null, $hi: null, $props...) {
+  $m-list: __mm-slice($lo, $hi);
+  @if length($props) > 0 and length($m-list) > 2 {
+    $len: length($m-list);
+    $m-list: join(
+      join(
+        __slice($m-list, 1, 1),
+        __mm-filter-orig(__slice($m-list, 2, $len - 1), $props...)
+      ),
+      __slice($m-list, $len, $len)
+    );
+  }
+  @return __mm-pairs($m-list);
+}
+
 

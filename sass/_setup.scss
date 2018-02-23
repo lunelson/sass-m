@@ -1,39 +1,28 @@
 //
-// init
+// INIT
 //
 
-
-@mixin m-init($basis: 'breakpoint') {
+@mixin m-init($basis: 'breakpoint', $rules: true) {
 
   // init base
+
   $base-orig: $base !global;
-  $base: __normalize-medium(data-merge($medium-default, $base), 16px) !global;
-  @if length($media) == 0 { $media: map-get($media-defaults, $basis) !global; }
+  $base: __normalize-medium(map-merge($medium-default, $base), 16px) !global;
+
   // init media
+
   $media-orig: $media !global;
   $reference: $base;
   @each $m, $medium in $media {
     @if not index(map-keys($medium), $basis) { @include error('sass-m / m-init: one of your $media does not have a #{$basis} key'); }
-    $reference: __normalize-medium(data-merge($reference, $medium));
+    $reference: __normalize-medium(__deep-merge($reference, $medium));
     $reference: call('__populate-medium-by-#{$basis}', $reference);
     $media: map-merge($media, ($m: $reference)) !global;
   }
-  $done-m-init: true !global;
-}
 
+  $done-m: true !global;
 
-//
-// setup
-//
-
-
-@mixin m-setup($basis: 'breakpoint') {
-
-  // run init, if it's not done
-  @if not $done-m-init { @include m-init($basis); }
-  // output media and base as json
-  @include set-css-data((media: $media, base: $base));
-  // output html ground-rules
-  @include mm-for('size') { html { font-size: medium-var('scale') * 1em; } }
-  $done-m-setup: true !global;
+  @if $rules {
+    @include mm-for('font-size') { html { font-size: medium-var('html-scale') * 1em; } }
+  }
 }

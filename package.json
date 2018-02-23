@@ -1,45 +1,48 @@
 {
-  "name": "sass-m",
-  "version": "0.9.0",
-  "description": "my sass media/scope mgmt system",
+  "name": "@lunelson/sass-m",
+  "version": "0.8.0",
+  "description": "A Sass Media-query and Media-scoped variable system",
+  "keywords": [
+    "custom-properties",
+    "libsass",
+    "media",
+    "media-query",
+    "sass",
+    "scope",
+    "variables"
+  ],
+  "homepage": "https://github.com/lunelson/sass-m#readme",
+  "bugs": {
+    "url": "https://github.com/lunelson/sass-m/issues"
+  },
+  "license": "MIT",
+  "author": "Lu Nelson",
   "main": "_index.scss",
   "directories": {
     "test": "test"
   },
-  "private": true,
-  "scripts": {
-    "test": "gulp test"
-  },
-  "author": "Lu Nelson",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lunelson/sass-m.git"
   },
-  "bugs": {
-    "url": "https://github.com/lunelson/sass-m/issues"
-  },
-  "homepage": "https://github.com/lunelson/sass-m#readme",
-  "keywords": [
-    "libsass",
-    "sass",
-    "media",
-    "media-query",
-    "scope",
-    "variables",
-    "custom-properties"
-  ],
-  "dependencies": {
-    "sass-calc": "github:lunelson/sass-calc",
-    "sass-maps-plus": "github:lunelson/sass-maps-plus",
-    "sass-throw": "github:lunelson/sass-throw",
-    "sass-to-js": "github:lunelson/sass-to-js",
-    "sass-u": "github:lunelson/sass-u"
+  "scripts": {
+    "start": "gulp",
+    "test": "gulp test"
   },
   "devDependencies": {
+    "@lunelson/sass-calc": "^0.9.1",
+    "@lunelson/sass-maps-plus": "^0.9.0",
+    "@lunelson/sass-throw": "^1.0.1",
+    "@lunelson/sass-u": "^0.9.1",
     "gulp": "^3.9.1",
     "gulp-diff": "^1.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0"
+  },
+  "peerDependencies": {
+    "@lunelson/sass-calc": "^0.9.1",
+    "@lunelson/sass-maps-plus": "^0.9.0",
+    "@lunelson/sass-throw": "^1.0.1",
+    "@lunelson/sass-u": "^0.9.1"
   }
 }

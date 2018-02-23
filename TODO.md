@@ -1,79 +1,25 @@
-## renaming
+# TODO
 
-m-inner-x($mult)
-m-inner-y($mult)
-m-outer-top
-m-outer-right
-m-outer-bottom
-m-outer-left
-m-size
-m-line
-m-auto-line
+## simplification
 
-## testing
+- reduce API surface; be more agnostic and testable
+- change dependencies to dev- and peerDependencies
 
-add a couple of test on value-getter-base functions
+## API changes
 
-## confirm
+  DEFAULTS
+    $root
+    $media
 
-- update mm-for related functions
-- update references to line-height, font-size etc.
+  FUNCTIONS
+    m($m)
+    m-orig($m)
+    -
+    m-var($var|$subvar, $m)
+    m-orig-var($var|$subvar, $m)
+    m-var-orig($var|$subvar, $m)
 
-## keep on with structure
-
-_index
-
-stylesheets/
-
-  grid/
-    functions.scss
-      _grid-width
-      cell-width // for pushing elements
-
-    mixins.scss
-      _cell-padding
-      _grid-margins
-      _float-cell
-      _float-grid
-      _flex-cell
-      _flex-grid
-      _degrid
-      cell
-      grid
-      regrid
-      ungrid
-      cell-push
-      cell-span
-      cell-cycle
-      grid-debug
-    setup.scss
-      setup-grid
-
-  page/
-    mixins/
-      outer
-      wrap
-      unwrap
-
-  stack/
-    mixins.scss
-      stack
-    setup.scss
-      setup-stack
-
-  typo/
-    mixins.scss
-      typo
-    setup.scss
-      setup-typo
-
-  util/
-    functions.scss
-    mixins.scss
-      clip, hide, show, hold
-    setup.scss
-      setup-fonts
-      setup-outer
-      setup-wrap
-      setup-unwrap
-      setup-hold
+  MIXINS
+    m()
+    mm()
+    mm-for()
