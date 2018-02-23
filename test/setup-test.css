@@ -7,12 +7,8 @@
 /* $media: (
   alpha: (
     font-size: 16px,
-    inner-x: 2rem,
     outer-right: 2rem,
     outer-left: 2rem,
-    copy-width: 30rem,
-    copy-columns: 6,
-    grid-columns: 6,
     number: 2,
     map: (
       a: 1,
@@ -20,7 +16,7 @@
     ),
     list: 1 2 3,
     html-scale: 1,
-    line: 3.125rem,
+    line: 1.25rem,
     test: 2.5rem,
     breakpoint: 20em,
     size: 1.0625rem,
@@ -29,12 +25,8 @@
   ),
   beta: (
     font-size: 16px,
-    inner-x: 2rem,
     outer-right: 2rem,
     outer-left: 2rem,
-    copy-width: 30rem,
-    copy-columns: 6,
-    grid-columns: 6,
     number: 3,
     map: (
       a: 2,
@@ -43,7 +35,7 @@
     ),
     list: 2 3 4,
     html-scale: 1,
-    line: 3.125rem,
+    line: 1.25rem,
     test: 2.5rem,
     breakpoint: 30em,
     size: 1.1875rem,
@@ -52,12 +44,8 @@
   ),
   gamma: (
     font-size: 16px,
-    inner-x: 2rem,
     outer-right: 2rem,
     outer-left: 2rem,
-    copy-width: 30rem,
-    copy-columns: 6,
-    grid-columns: 6,
     number: 5,
     map: (
       a: 2,
@@ -66,7 +54,7 @@
     ),
     list: 2 3 4,
     html-scale: 1,
-    line: 3.125rem,
+    line: 1.25rem,
     test: 2.5rem,
     breakpoint: 40em,
     size: 1.3125rem,

@@ -9,13 +9,3 @@ $media: () !default;
 
 $curr-m: null;
 $done-m: false;
-
-$medium-default: (
-  font-size: 16px,
-  inner-x: 2rem,
-  outer-right: 2rem,
-  outer-left: 2rem,
-  copy-width: 30rem,
-  copy-columns: 6,
-  grid-columns: 6,
-);
