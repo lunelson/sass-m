@@ -8,7 +8,7 @@
 ## API changes
 
   DEFAULTS
-    $root
+    $base|$root (rename $base?)
     $media
 
   FUNCTIONS
