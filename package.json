@@ -44,5 +44,8 @@
     "@lunelson/sass-maps-plus": "^0.9.0",
     "@lunelson/sass-throw": "^1.0.1",
     "@lunelson/sass-u": "^0.9.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
