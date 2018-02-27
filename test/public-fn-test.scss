@@ -1,11 +1,4 @@
-// peerDependencies
-
-@import '@lunelson/sass-throw/index';
-@import '@lunelson/sass-maps-plus/index';
-@import '@lunelson/sass-calc/index';
-@import '@lunelson/sass-u/index';
-
-// self
+@import 'peers';
 @import '../index';
 
 $base: ( foo: bar );
