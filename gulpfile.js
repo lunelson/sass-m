@@ -25,31 +25,48 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const diff = require('gulp-diff');
 const rename = require('gulp-rename');
+const watch = require('gulp-watch');
+const plumber = require('gulp-plumber');
 
 const testDest = './test';
 const testGlob = './test/**/*.scss';
 const sassIncl = path.join(__dirname, 'node_modules');
 
-function renderTests() {
-  return gulp.src(testGlob)
+gulp.task('work', function () {
+  return watch(testGlob, { ignoreInitial: true })
+    .pipe(plumber())
     .pipe(sass({
       outputStyle: 'expanded',
       includePaths: [sassIncl]
     }).on('error', sass.logError))
-}
-
-gulp.task('work', function(){
-  return renderTests()
-    .pipe(gulp.dest(testDest))
+    .pipe(gulp.dest(testDest));
 });
 
+// function renderTests() {
+//   return gulp.src(testGlob)
+//     .pipe(sass({
+//       outputStyle: 'expanded',
+//       includePaths: [sassIncl]
+//     }).on('error', sass.logError))
+// }
+
+// gulp.task('work', function(){
+//   return renderTests()
+//     .pipe(gulp.dest(testDest))
+// });
+
 gulp.task('test', function(){
-  return renderTests()
+  return gulp.src(testGlob)
+    .pipe(plumber())
+    .pipe(sass({
+      outputStyle: 'expanded',
+      includePaths: [sassIncl]
+    }).on('error', sass.logError))
     .pipe(rename({extname: '.css'}))
     .pipe(diff())
     .pipe(diff.reporter({ fail: true }));
 });
 
-gulp.task('default', function () {
-  return gulp.watch(testGlob, ['work']);
-});
+// gulp.task('default', function () {
+//   return gulp.watch(testGlob, ['work']);
+// });

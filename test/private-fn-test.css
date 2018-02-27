@@ -1,0 +1,9 @@
+.test {
+  out: a, a b, b c, c;
+  out: a b c;
+  out: a;
+  out: a, b, c;
+  out: b, c;
+  out: a, b;
+  out: a b;
+}

@@ -1,0 +1,127 @@
+// peerDependencies
+
+@import '@lunelson/sass-throw/index';
+@import '@lunelson/sass-maps-plus/index';
+@import '@lunelson/sass-calc/index';
+@import '@lunelson/sass-u/index';
+
+// self
+@import '../index';
+
+$base: ( foo: bar );
+$media: (
+  a: (breakpoint: 20em, foo: baz),
+  b: (breakpoint: 40em, foo: biz),
+  c: (breakpoint: 60em, foo: bop),
+);
+
+@include m-init(false);
+
+$st-catch: true;
+
+//  _            _
+// | |          | |
+// | |_ ___  ___| |_ ___
+// | __/ _ \/ __| __/ __|
+// | ||  __/\__ \ |_\__ \
+//  \__\___||___/\__|___/
+
+
+/*
+  m(): return medum $m from $media, or $base if falsey arg
+*/
+
+.m {
+  /*
+  falsey key -> return $base
+  ==========
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bar, "html-scale": 1);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bar, "html-scale": 1);
+  */
+  out: inspect(m(null));
+  out: inspect(m(false));
+  /*
+  key not found
+  ==========
+  out: null;
+  err: "medium '1' not found in $media";
+  out: null;
+  err: "medium '1 2' not found in $media";
+  out: null;
+  err: "medium 'd' not found in $media";
+  out: null;
+  err: "medium 'e' not found in $media";
+  out: null;
+  err: "medium 'f' not found in $media";
+  */
+  out: inspect(m(1));
+  err: last-error();
+  out: inspect(m(1 2));
+  err: last-error();
+  out: inspect(m(d));
+  err: last-error();
+  out: inspect(m(e));
+  err: last-error();
+  out: inspect(m(f));
+  err: last-error();
+  /*
+  key found
+  ==========
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: baz, "html-scale": 1, breakpoint: 20em, "outer-width": 20rem, "inner-width": 16rem);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: biz, "html-scale": 1, breakpoint: 40em, "outer-width": 40rem, "inner-width": 36rem);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bop, "html-scale": 1, breakpoint: 60em, "outer-width": 60rem, "inner-width": 56rem);
+  */
+  out: inspect(m(a));
+  out: inspect(m(b));
+  out: inspect(m(c));
+}
+
+
+/*
+  m-orig(): return original medum from $media-orig, or $base-orig if falsey arg
+*/
+
+.m-orig {
+  /*
+  falsey key -> return $base-orig
+  ==========
+  out: (foo: bar);
+  out: (foo: bar);
+  */
+  out: inspect(m-orig(null));
+  out: inspect(m-orig(false));
+  /*
+  key not found
+  ==========
+  out: null;
+  err: "original medium '1' not found in $media";
+  out: null;
+  err: "original medium '1 2' not found in $media";
+  out: null;
+  err: "original medium 'd' not found in $media";
+  out: null;
+  err: "original medium 'e' not found in $media";
+  out: null;
+  err: "original medium 'f' not found in $media";
+  */
+  out: inspect(m-orig(1));
+  err: last-error();
+  out: inspect(m-orig(1 2));
+  err: last-error();
+  out: inspect(m-orig(d));
+  err: last-error();
+  out: inspect(m-orig(e));
+  err: last-error();
+  out: inspect(m-orig(f));
+  err: last-error();
+  /*
+  key found
+  ==========
+  out: (breakpoint: 20em, foo: baz);
+  out: (breakpoint: 40em, foo: biz);
+  out: (breakpoint: 60em, foo: bop);
+  */
+  out: inspect(m-orig(a));
+  out: inspect(m-orig(b));
+  out: inspect(m-orig(c));
+}

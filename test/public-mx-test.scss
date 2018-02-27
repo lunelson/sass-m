@@ -1,0 +1,36 @@
+// peerDependencies
+
+@import '@lunelson/sass-throw/index';
+@import '@lunelson/sass-maps-plus/index';
+@import '@lunelson/sass-calc/index';
+@import '@lunelson/sass-u/index';
+
+// self
+@import '../index';
+
+$media: (
+  a: (breakpoint: 20em),
+  b: (breakpoint: 40em),
+  c: (breakpoint: 60em),
+);
+
+@include m-init(false);
+
+$st-catch: true;
+
+/*
+  @mixin m()
+*/
+
+.m {
+  color: red;
+  @include m(null) {
+    color: blue;
+  }
+  @include m(d) {
+    color: blue;
+  }
+  @include m(a) {
+    color: blue;
+  }
+}

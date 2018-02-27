@@ -5,10 +5,10 @@ $medium-default: (
 );
 
 //
-// INIT
+// INIT by BREAKPOINT
 //
 
-@mixin m-init($basis: 'breakpoint', $rules: true) {
+@mixin m-init($rules: true) {
 
   // init base
 
@@ -20,9 +20,9 @@ $medium-default: (
   $media-orig: $media !global;
   $reference: $base;
   @each $m, $medium in $media {
-    @if not index(map-keys($medium), $basis) { @include error('sass-m / m-init: one of your $media does not have a #{$basis} key'); }
+    @if not index(map-keys($medium), 'breakpoint') { @include error('sass-m / m-init: one of your $media does not have a breakpoint key'); }
     $reference: __normalize-medium(__deep-merge($reference, $medium));
-    $reference: call('__populate-medium-by-#{$basis}', $reference);
+    $reference: call('__populate-medium-by-breakpoint', $reference);
     $media: map-merge($media, ($m: $reference)) !global;
   }
 

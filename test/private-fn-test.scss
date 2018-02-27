@@ -1,0 +1,37 @@
+// peerDependencies
+
+@import '@lunelson/sass-throw/index';
+@import '@lunelson/sass-maps-plus/index';
+@import '@lunelson/sass-calc/index';
+@import '@lunelson/sass-u/index';
+
+// self
+@import '../index';
+
+$base: ( foo: bar );
+$media: (
+  a: (breakpoint: 20em, foo: baz, x: 1),
+  b: (breakpoint: 40em, foo: biz, y: 2),
+  c: (breakpoint: 60em, foo: bop, z: 3),
+);
+
+@include m-init(false);
+
+$st-catch: true;
+
+//  _            _
+// | |          | |
+// | |_ ___  ___| |_ ___
+// | __/ _ \/ __| __/ __|
+// | ||  __/\__ \ |_\__ \
+//  \__\___||___/\__|___/
+
+.test {
+  out: mm(null, null, 'breakpoint');
+  out: __mm-where('breakpoint');
+  out: __mm-where(x);
+  out: __mm-slice(a,c);
+  out: __mm-slice(b);
+  out: __mm-slice(null,b);
+  out: __mm-pairs(a b);
+}

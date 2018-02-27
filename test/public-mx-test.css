@@ -1,0 +1,19 @@
+/*
+  @mixin m()
+*/
+.m {
+  color: red;
+  color: blue;
+}
+
+@media screen and (min-width: d) {
+  .m {
+    color: blue;
+  }
+}
+
+@media screen and (min-width: 20em) {
+  .m {
+    color: blue;
+  }
+}

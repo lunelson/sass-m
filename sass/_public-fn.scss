@@ -1,16 +1,16 @@
 //
-// value getters, base ✅
+// value getters, base
 //
 
 
-@function medium($m: $curr-m) {
+@function m($m: $curr-m) {
   @if not $done-m { @return error("m not initialized; please '@include m-init()'"); }
   @if $m { @return map-get($media, $m) or error("medium '#{$m}' not found in $media");}
   @return $base;
 }
 
 
-@function medium-orig($m: $curr-m) {
+@function m-orig($m: $curr-m) {
   @if not $done-m { @return error("m not initialized; please '@include m-init()'"); }
   @if $m { @return map-get($media-orig, $m) or error("original medium '#{$m}' not found in $media"); }
   @return $base-orig;
@@ -22,20 +22,20 @@
 //
 
 
-@function medium-has($key, $m: $curr-m) {
-  @return map-has-key(medium($m), $key);
+// @function medium-has($key, $m: $curr-m) {
+//   @return map-has-key(medium($m), $key);
+// }
+
+@function m-var($key, $m: $curr-m) {
+  @return map-get(m($m), $key);
 }
 
-@function medium-var($key, $m: $curr-m) {
-  @return map-get(medium($m), $key);
-}
+// @function medium-orig-has($key, $m: $curr-m) {
+//   @return map-has-key(m-orig($m), $key);
+// }
 
-@function medium-orig-has($key, $m: $curr-m) {
-  @return map-has-key(medium-orig($m), $key);
-}
-
-@function medium-orig-var($key, $m: $curr-m) {
-  @return map-get(medium-orig($m), $key);
+@function m-orig-var($key, $m: $curr-m) {
+  @return map-get(m-orig($m), $key);
 }
 
 
@@ -43,55 +43,9 @@
 // aliases of above
 //
 
+@function m-var-orig($args...) { @return m-orig-var($args...);}
 
-@function m($args...) { @return medium($args...);}
-@function m-orig($args...) { @return medium-orig($args...);}
+// @function m($args...) { @return medium($args...);}
+// @function m-orig($args...) { @return m-orig($args...);}
 
-@function m-var($args...) { @return medium-var($args...);}
-@function m-orig-var($args...) { @return medium-orig-var($args...);}
-
-
-//
-// value getters, simple ✅
-//
-
-@function inner-x($mult: $curr-inner-x, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'inner-x', $m);
-  @return if(is-unitless($mult), $mult * medium-var('inner-x', $m), $mult);
-}
-
-
-@function inner-y($mult: $curr-inner-y, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'inner-y', $m);
-  @return if(is-unitless($mult), $mult * medium-var('inner-y', $m), $mult);
-}
-
-
-@function outer-top($mult: $curr-outer-y, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'outer-y', $m);
-  @return if(is-unitless($mult), $mult * medium-var('outer-top', $m), $mult);
-}
-
-
-@function outer-right($mult: $curr-outer-x, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'outer-x', $m);
-  @return if(is-unitless($mult), $mult * medium-var('outer-right', $m), $mult);
-}
-
-
-@function outer-bottom($mult: $curr-outer-y, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'outer-y', $m);
-  @return if(is-unitless($mult), $mult * medium-var('outer-bottom', $m), $mult);
-}
-
-
-@function outer-left($mult: $curr-outer-x, $m: $curr-m) {
-  @if not $mult { @return null; }
-  $mult: __mult($mult, 'outer-x', $m);
-  @return if(is-unitless($mult), $mult * medium-var('outer-left', $m), $mult);
-}
+// @function m-var($args...) { @return medium-var($args...);}

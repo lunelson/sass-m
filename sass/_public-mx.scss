@@ -6,7 +6,8 @@
 @mixin m($min, $max: null) {
   $prev-m: $curr-m;
   $curr-m: $min !global;
-  @media #{__query-string($min, $max)} { @content }
+  @if not $min and not $max { @content; }
+  @else { @media #{__query-string($min, $max)} { @content } }
   $curr-m: $prev-m !global;
 }
 
@@ -34,6 +35,6 @@
 //
 
 
-@mixin medium($args...) { @include m($args...) { @content; } }
-@mixin media($args...) { @include mm($args...) { @content; } }
-@mixin media-for($args...) { @include mm-for($args...) { @content; } }
+// @mixin medium($args...) { @include m($args...) { @content; } }
+// @mixin media($args...) { @include mm($args...) { @content; } }
+// @mixin media-for($args...) { @include mm-for($args...) { @content; } }

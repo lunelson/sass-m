@@ -1,0 +1,95 @@
+/*
+  m(): return medum $m from $media, or $base if falsey arg
+*/
+.m {
+  /*
+  falsey key -> return $base
+  ==========
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bar, "html-scale": 1);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bar, "html-scale": 1);
+  */
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bar, "html-scale": 1);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bar, "html-scale": 1);
+  /*
+  key not found
+  ==========
+  out: null;
+  err: "medium '1' not found in $media";
+  out: null;
+  err: "medium '1 2' not found in $media";
+  out: null;
+  err: "medium 'd' not found in $media";
+  out: null;
+  err: "medium 'e' not found in $media";
+  out: null;
+  err: "medium 'f' not found in $media";
+  */
+  out: null;
+  err: "medium '1' not found in $media";
+  out: null;
+  err: "medium '1 2' not found in $media";
+  out: null;
+  err: "medium 'd' not found in $media";
+  out: null;
+  err: "medium 'e' not found in $media";
+  out: null;
+  err: "medium 'f' not found in $media";
+  /*
+  key found
+  ==========
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: baz, "html-scale": 1, breakpoint: 20em, "outer-width": 20rem, "inner-width": 16rem);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: biz, "html-scale": 1, breakpoint: 40em, "outer-width": 40rem, "inner-width": 36rem);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bop, "html-scale": 1, breakpoint: 60em, "outer-width": 60rem, "inner-width": 56rem);
+  */
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: baz, "html-scale": 1, breakpoint: 20em, "outer-width": 20rem, "inner-width": 16rem);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: biz, "html-scale": 1, breakpoint: 40em, "outer-width": 40rem, "inner-width": 36rem);
+  out: (font-size: 16px, outer-right: 2rem, outer-left: 2rem, foo: bop, "html-scale": 1, breakpoint: 60em, "outer-width": 60rem, "inner-width": 56rem);
+}
+
+/*
+  m-orig(): return original medum from $media-orig, or $base-orig if falsey arg
+*/
+.m-orig {
+  /*
+  falsey key -> return $base-orig
+  ==========
+  out: (foo: bar);
+  out: (foo: bar);
+  */
+  out: (foo: bar);
+  out: (foo: bar);
+  /*
+  key not found
+  ==========
+  out: null;
+  err: "original medium '1' not found in $media";
+  out: null;
+  err: "original medium '1 2' not found in $media";
+  out: null;
+  err: "original medium 'd' not found in $media";
+  out: null;
+  err: "original medium 'e' not found in $media";
+  out: null;
+  err: "original medium 'f' not found in $media";
+  */
+  out: null;
+  err: "original medium '1' not found in $media";
+  out: null;
+  err: "original medium '1 2' not found in $media";
+  out: null;
+  err: "original medium 'd' not found in $media";
+  out: null;
+  err: "original medium 'e' not found in $media";
+  out: null;
+  err: "original medium 'f' not found in $media";
+  /*
+  key found
+  ==========
+  out: (breakpoint: 20em, foo: baz);
+  out: (breakpoint: 40em, foo: biz);
+  out: (breakpoint: 60em, foo: bop);
+  */
+  out: (breakpoint: 20em, foo: baz);
+  out: (breakpoint: 40em, foo: biz);
+  out: (breakpoint: 60em, foo: bop);
+}
