@@ -33,6 +33,6 @@ $medium-default: (
   $done-m: true !global;
 
   @if $rules {
-    @include mm-for('font-size') { html { font-size: medium-var('html-scale') * 1em; } }
+    @include mm-for('font-size') { html { font-size: m-var('html-scale') * 1em; } }
   }
 }

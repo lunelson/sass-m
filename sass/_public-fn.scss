@@ -21,13 +21,27 @@
 // value getters, generic
 //
 
+@function map-has-z($map, $keys...) {
+  @each $key in $keys {
+    @if not map-has-key($map, $key) { @return false; }
+    $map: map-get($map, $key);
+  }
+  @return true;
+}
+
+@function key-path($keys...) {
+  @return if(length($keys) > 0,'->#{nth(keys, 1)}','');
+}
 
 // @function medium-has($key, $m: $curr-m) {
 //   @return map-has-key(medium($m), $key);
 // }
 
 @function m-var($key, $m: $curr-m) {
-  @return map-get(m($m), $key);
+  $medium: m($m);
+  // $m-name: if($m, '$media->#{$m}', '$base');
+  // @if not map-has-z($medium, $key...) { @warn '#{$key} is not present in #{$m-name}'; }
+  @return map-get-z($medium, $key...);
 }
 
 // @function medium-orig-has($key, $m: $curr-m) {
@@ -35,7 +49,7 @@
 // }
 
 @function m-orig-var($key, $m: $curr-m) {
-  @return map-get(m-orig($m), $key);
+  @return map-get-z(m-orig($m), $key...);
 }
 
 
@@ -48,4 +62,4 @@
 // @function m($args...) { @return medium($args...);}
 // @function m-orig($args...) { @return m-orig($args...);}
 
-// @function m-var($args...) { @return medium-var($args...);}
+// @function m-var($args...) { @return m-var($args...);}

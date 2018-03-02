@@ -2,6 +2,7 @@ $medium-default: (
   font-size: 16px,
   outer-right: 2rem,
   outer-left: 2rem,
+  grid-columns: 12,
 );
 
 //
@@ -29,6 +30,6 @@ $medium-default: (
   $done-m: true !global;
 
   @if $rules {
-    @include mm-for('font-size') { html { font-size: medium-var('html-scale') * 1em; } }
+    @include mm-for('font-size') { html { font-size: m-var('html-scale') * 1em; } }
   }
 }
