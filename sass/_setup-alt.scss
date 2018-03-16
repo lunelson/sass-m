@@ -26,7 +26,7 @@ $medium-default: (
   @each $m, $medium in $media {
     @if not index(map-keys($medium), 'grid-columns') { @include error('sass-m / m-init: one of your $media does not have a grid-columns key'); }
     $reference: __normalize-medium(__deep-merge($reference, $medium));
-    $reference: call('__populate-medium-by-grid-columns', $reference);
+    $reference: call(get-function('__populate-medium-by-grid-columns'), $reference);
     $media: map-merge($media, ($m: $reference)) !global;
   }
 

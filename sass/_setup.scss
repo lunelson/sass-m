@@ -23,7 +23,7 @@ $medium-default: (
   @each $m, $medium in $media {
     @if not index(map-keys($medium), 'breakpoint') { @include error('sass-m / m-init: one of your $media does not have a breakpoint key'); }
     $reference: __normalize-medium(__deep-merge($reference, $medium));
-    $reference: call('__populate-medium-by-breakpoint', $reference);
+    $reference: call(get-function('__populate-medium-by-breakpoint'), $reference);
     $media: map-merge($media, ($m: $reference)) !global;
   }
 
